@@ -1,0 +1,169 @@
+---
+// Test page for the design tokens. Lives at /styleguide because of its file name.
+// Not linked in the final site navigation.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import GlassButton from "../components/GlassButton.astro";
+
+// Tailwind only generates classes it finds written out in full in the code,
+// so each swatch has its full class name (not built as `bg-${name}`).
+const colorGroups = [
+  {
+    group: "Backgrounds",
+    items: [
+      { name: "void", hex: "#0a0b0d", light: "#f1efea", swatch: "bg-void", note: "page background" },
+      { name: "night", hex: "#121418", light: "#e8e5df", swatch: "bg-night", note: "sections, footer" },
+      { name: "graphite", hex: "#1a1d22", light: "#dfdbd3", swatch: "bg-graphite", note: "cards, surfaces" },
+      { name: "steel", hex: "#2a2e35", light: "#d1ccc2", swatch: "bg-steel", note: "hover, dividers" },
+    ],
+  },
+  {
+    group: "Text",
+    items: [
+      { name: "bone", hex: "#ecebe7", light: "#14161a", swatch: "bg-bone", note: "primary text" },
+      { name: "ash", hex: "#9a9ea6", light: "#4c5058", swatch: "bg-ash", note: "secondary text" },
+      { name: "smoke", hex: "#62666e", light: "#5f6369", swatch: "bg-smoke", note: "meta. Dark: 3.4:1, below AA" },
+      { name: "smoke (proposal)", hex: "#7a7e86", light: "—", swatch: "bg-[#7a7e86]", note: "dark only: 4.8:1, passes AA" },
+    ],
+  },
+  {
+    group: "Accents",
+    items: [
+      { name: "signal", hex: "#6f9bff", light: "#2f5bc4", swatch: "bg-signal", note: "focus, links, indicators" },
+      { name: "signal-dim", hex: "#3d5a99", light: "#9db4ea", swatch: "bg-signal-dim", note: "glow, subtle fills" },
+      { name: "dust", hex: "#c9a27e", light: "#8a6a48", swatch: "bg-dust", note: "very limited use" },
+    ],
+  },
+];
+
+const backgrounds = [
+  { name: "void", class: "bg-void" },
+  { name: "night", class: "bg-night" },
+  { name: "graphite", class: "bg-graphite" },
+];
+---
+
+<BaseLayout title="Styleguide" description="Design tokens test page">
+  <main class="mx-auto max-w-5xl space-y-28 px-6 py-24">
+    <header class="space-y-5" data-reveal-stagger>
+      <p class="label text-ash">00 // Styleguide</p>
+      <h1 class="heading-xl">Design tokens</h1>
+      <p class="max-w-[65ch] leading-relaxed text-ash">
+        Colours, typography and the glass button, collected on one page to judge the look and feel.
+        Use the sun/moon button in the navbar to switch between dark and light.
+      </p>
+    </header>
+
+    <!-- 01: Colours -->
+    <section class="space-y-12">
+      <p class="label text-ash" data-reveal>01 // Colours</p>
+
+      {colorGroups.map(({ group, items }) => (
+        <div class="space-y-4">
+          <h2 class="heading-md" data-reveal>{group}</h2>
+          <ul class="grid grid-cols-2 gap-4 sm:grid-cols-4" data-reveal-stagger>
+            {items.map((c) => (
+              <li class="rounded-xl border border-line bg-night p-3">
+                <div class:list={["h-16 rounded-lg border border-line", c.swatch]}></div>
+                <p class="mt-3 text-sm">{c.name}</p>
+                <p class="mt-1 font-mono text-xs text-ash">{c.hex} / {c.light}</p>
+                <p class="mt-2 text-xs text-ash">{c.note}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <div class="space-y-3" data-reveal-stagger>
+        <h2 class="heading-md">Text on backgrounds</h2>
+        {backgrounds.map((bg) => (
+          <div class:list={["flex flex-wrap items-baseline gap-x-8 gap-y-2 rounded-xl border border-line px-5 py-4", bg.class]}>
+            <span class="label w-24 text-ash">{bg.name}</span>
+            <span class="text-bone">Bone primary</span>
+            <span class="text-ash">Ash secondary</span>
+            <span class="text-sm text-smoke">Smoke meta</span>
+            <span class="text-sm text-[#7a7e86]">Smoke proposal</span>
+            <span class="text-signal">Signal link</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 02: Typography -->
+    <section class="space-y-12">
+      <p class="label text-ash" data-reveal>02 // Typography</p>
+
+      <div class="space-y-10 border-t border-line pt-10" data-reveal-stagger>
+        <div class="space-y-3">
+          <p class="label text-ash">heading-xl · Inter Tight 300</p>
+          <p class="heading-xl">Quinten van der Vlies</p>
+        </div>
+        <div class="space-y-3">
+          <p class="label text-ash">heading-lg · Inter Tight 300</p>
+          <p class="heading-lg">Front-end developer</p>
+        </div>
+        <div class="space-y-3">
+          <p class="label text-ash">heading-md · Inter Tight 400</p>
+          <p class="heading-md">Selected projects</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 border-t border-line pt-10" data-reveal>
+        <p class="label text-ash">Body · Inter Tight 400 · max 65 characters per line</p>
+        <p class="max-w-[65ch] leading-relaxed">
+          Sample paragraph. This text only exists to judge line length, line height and the
+          readability of the body font on a dark background. Lines stay below roughly seventy
+          characters so they remain comfortable to read.
+        </p>
+        <p class="max-w-[65ch] leading-relaxed text-ash">
+          Secondary paragraph in ash, for supporting text and descriptions.
+        </p>
+      </div>
+
+      <div class="space-y-5 border-t border-line pt-10" data-reveal>
+        <p class="label text-ash">Mono labels · JetBrains Mono · uppercase</p>
+        <div class="flex flex-wrap gap-x-10 gap-y-4">
+          <span class="label">01 // 04</span>
+          <span class="label text-ash">2026</span>
+          <span class="label text-ash">React · Tailwind</span>
+          <span class="label text-smoke">Smoke label</span>
+          <span class="label text-[#7a7e86]">Smoke proposal</span>
+          <span class="label inline-flex items-center gap-2 text-ash">
+            <span class="size-1.5 rounded-full bg-signal"></span>
+            Available for internship
+          </span>
+        </div>
+      </div>
+
+      <!-- The recurring pattern: thin rows, title left, meta right -->
+      <div class="border-t border-line pt-10" data-reveal-stagger>
+        <p class="label mb-4 text-ash">Row pattern</p>
+        {["Role", "Year", "Stack"].map((key) => (
+          <div class="flex items-baseline justify-between border-b border-line py-4">
+            <span>{key}</span>
+            <span class="label text-ash">TODO</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 03: Glass button -->
+    <section class="space-y-6">
+      <p class="label text-ash" data-reveal>03 // Glass button</p>
+      <div data-reveal class="relative overflow-hidden rounded-2xl border border-line bg-night px-6 py-20">
+        <!-- Temporary glow so the blur has something to show. The real glow comes with the background (step 3). -->
+        <div class="pointer-events-none absolute -left-16 top-1/2 size-72 -translate-y-1/2 rounded-full bg-signal/35 blur-3xl"></div>
+        <div class="pointer-events-none absolute right-12 top-0 size-40 rounded-full bg-dust/15 blur-3xl"></div>
+
+        <div class="relative flex flex-wrap items-center gap-4">
+          <GlassButton href="#">View live</GlassButton>
+          <GlassButton>View code</GlassButton>
+          <GlassButton href="#">
+            <span class="size-1.5 rounded-full bg-signal"></span>
+            Contact
+          </GlassButton>
+        </div>
+      </div>
+      <p class="text-sm text-ash" data-reveal>Hover, click and Tab through the buttons to see hover, pressed and focus states.</p>
+    </section>
+  </main>
+</BaseLayout>

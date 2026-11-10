@@ -1,0 +1,22 @@
+---
+// Glass pill button. With `href` it renders a link (<a>), otherwise a <button>.
+// Usage: <GlassButton href="https://...">View live</GlassButton>
+const { href, type = "button", class: className } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href}
+  type={href ? undefined : type}
+  class:list={[
+    "glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm text-bone",
+    "transition duration-300 ease-out",
+    // hover: slightly lighter surface + soft blue glow
+    "hover:bg-glass-hover hover:shadow-glass-hover",
+    // pressed: tiny scale down
+    "active:scale-[0.98]",
+    className,
+  ]}
+>
+  <slot />
+</Tag>

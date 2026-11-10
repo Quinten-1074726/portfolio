@@ -1,0 +1,40 @@
+---
+// Shared page shell: <head>, global styles and the page content (<slot />).
+// Footer, background and View Transitions are added in later steps.
+import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
+
+const { title, description = "TODO: site description" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- is:inline = placed in the HTML as-is, runs before the page is painted (prevents a dark/light flash) -->
+    <script is:inline>
+      // "js" class: reveal animations may hide content only when JavaScript runs
+      document.documentElement.classList.add("js");
+      try {
+        if (localStorage.getItem("theme") === "light") {
+          document.documentElement.dataset.theme = "light";
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <Navbar />
+    <slot />
+
+    <!-- Bundled by Astro, runs after the page has loaded -->
+    <script>
+      import { initReveal } from "../scripts/reveal.js";
+      initReveal();
+    </script>
+  </body>
+</html>

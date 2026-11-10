@@ -1,0 +1,174 @@
+/* Fonts: self-hosted via Fontsource (variable versions, all weights in one file) */
+@import "@fontsource-variable/inter-tight";
+@import "@fontsource-variable/jetbrains-mono";
+
+@import "tailwindcss";
+
+/* `light:` variant, e.g. class="light:hidden" applies only in light mode */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+/* Design tokens (dark mode = default).
+   Every --color-* becomes a Tailwind class (bg-void, text-bone, border-line),
+   every --font-* becomes font-sans / font-mono, every --shadow-* becomes shadow-*.
+   Names are roles: "bone" = primary text, "void" = page background, in both themes. */
+@theme {
+  /* Backgrounds: near-black and dark grey, never pure black */
+  --color-void: #0a0b0d;       /* page background */
+  --color-night: #121418;      /* sections, footer */
+  --color-graphite: #1a1d22;   /* cards, surfaces */
+  --color-steel: #2a2e35;      /* hover surfaces, dividers */
+
+  /* Text */
+  --color-bone: #ecebe7;       /* primary text: off-white */
+  --color-ash: #9a9ea6;        /* secondary text */
+  --color-smoke: #62666e;      /* labels, meta, disabled. TODO: below WCAG AA for small text, decide in styleguide */
+
+  /* Accent: cool blue, use sparingly */
+  --color-signal: #6f9bff;
+  --color-signal-dim: #3d5a99;
+
+  /* Optional second accent: warm dust, very limited use */
+  --color-dust: #c9a27e;
+
+  /* Lines and glass */
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-glass: rgb(255 255 255 / 0.06);           /* glass surface */
+  --color-glass-hover: rgb(255 255 255 / 0.1);      /* lighter surface: hover, active nav item */
+  --color-glass-border: rgb(255 255 255 / 0.1);
+  --color-glass-fallback: rgb(26 29 34 / 0.9);      /* without backdrop-filter support */
+
+  --shadow-glass:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 8px 24px rgb(0 0 0 / 0.35);
+  --shadow-glass-hover:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 0 24px rgb(111 155 255 / 0.2);
+
+  /* Fonts */
+  --font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+
+/* Light mode: same token names, different values.
+   Active when <html data-theme="light"> (set by ThemeToggle). */
+@layer base {
+  :root[data-theme="light"] {
+    color-scheme: light;
+
+    /* Backgrounds: warm off-white, like pale sand */
+    --color-void: #f1efea;
+    --color-night: #e8e5df;
+    --color-graphite: #dfdbd3;
+    --color-steel: #d1ccc2;
+
+    /* Text */
+    --color-bone: #14161a;     /* 15.8:1 on void */
+    --color-ash: #4c5058;      /* 7.0:1 on void */
+    --color-smoke: #5f6369;    /* 5.3:1 on void */
+
+    /* Accents (darker blue for contrast on light) */
+    --color-signal: #2f5bc4;   /* 5.4:1 on void */
+    --color-signal-dim: #9db4ea;
+    --color-dust: #8a6a48;
+
+    /* Lines and glass */
+    --color-line: rgb(0 0 0 / 0.1);
+    --color-glass: rgb(255 255 255 / 0.55);
+    --color-glass-hover: rgb(255 255 255 / 0.85);
+    --color-glass-border: rgb(0 0 0 / 0.08);
+    --color-glass-fallback: rgb(241 239 234 / 0.92);
+
+    --shadow-glass:
+      inset 0 1px 0 rgb(255 255 255 / 0.8),
+      0 8px 24px rgb(20 22 26 / 0.08);
+    --shadow-glass-hover:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 0 24px rgb(47 91 196 / 0.18);
+  }
+}
+
+/* Base styles for the whole site */
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-void text-bone font-sans antialiased;
+    transition: background-color 300ms ease, color 300ms ease;
+  }
+
+  /* Visible blue focus state for keyboard users */
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+}
+
+/* Type styles: large, light headings with tight letter spacing */
+@utility heading-xl {
+  font-size: clamp(2.75rem, 7vw, 5.5rem);
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+@utility heading-lg {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+}
+
+@utility heading-md {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Small uppercase mono label: years, section numbers, tags */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Glass surface for navbar, buttons and small floating elements */
+@utility glass {
+  background-color: var(--color-glass-fallback);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-glass);
+
+  @supports (backdrop-filter: blur(1px)) {
+    background-color: var(--color-glass);
+    backdrop-filter: blur(24px) saturate(1.4);
+  }
+}
+
+/* Reveal animation: fade up when an element enters the viewport (also on page load).
+   Usage: data-reveal on an element, or data-reveal-stagger on a parent to reveal its children one by one.
+   Elements are only hidden when JavaScript runs (html.js), so content never stays invisible. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
