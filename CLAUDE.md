@@ -255,3 +255,11 @@ Bij `prefers-reduced-motion`: geen beweging, alleen directe weergave.
 ## Besluiten
 
 _(Hier noteren wat onderweg besloten wordt: gekozen fonts, definitieve kleuren, lijst vs. carousel, enz.)_
+
+- **Dust als subtiel tweede accent** (2026-11-10): iets zichtbaarder dan "alleen heel beperkt", maar nooit dominant. Gebruikt voor: tekstselectie (`::selection`) en de warme lichtrand bovenop glass-knoppen bij hover. Blauw blijft het hoofdaccent (focus, links, indicatoren, gloed).
+- **Breder doel en inhoud** (2026-11-10): de site is een algemeen portfolio, niet alleen voor de stage. Geen teksten over stage zoeken, school of minor op de site (dus geen "available for internship", geen CMGT/minor-feiten op de home).
+- **Geen sectienummers en decoratieve lijnen** (2026-11-10): geen "01 // 04"-labels en geen scheidingslijnen tussen secties. Dunne lijnen alleen waar ze een lijst ordenen (projectrijen, footer-rijen).
+- **Breed layout** (2026-11-10): alle content in de `wrap`-utility (max 110rem, zijmarge `clamp(1.25rem, 4vw, 4rem)`), ook de footer. Footer compacter dan eerst.
+- **Rol**: "Creative developer" (2026-11-10).
+- **Kopfont** (2026-11-10, voorlopig): Space Grotesk via `--font-display`; Inter Tight blijft voor bodytekst. Kandidaten Host Grotesk, Schibsted Grotesk en Geist staan ter vergelijking op `/styleguide`. TODO: definitief kiezen en de rest verwijderen.
+- **Home** (2026-11-10): naam (regel-voor-regel animatie bij laden) → 3 projecten + "Discover more" → korte About met knoppen "More about me" en "Timeline" → footer.

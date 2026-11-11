@@ -1,0 +1,81 @@
+---
+// Large footer: two columns (Contact, Navigation) with thin rows, then a copyright bar.
+// Contact items without an href are shown as plain text (until the TODO is filled in).
+const contact = [
+  { label: "Email", value: "TODO: email address", href: null }, // e.g. "mailto:name@example.com"
+  { label: "LinkedIn", value: "TODO: LinkedIn handle", href: null },
+  { label: "GitHub", value: "Quinten-1074726", href: "https://github.com/Quinten-1074726" },
+];
+
+const navigation = [
+  { label: "Home", href: "/" },
+  { label: "Projects", href: "/projects" },
+  { label: "Timeline", href: "/timeline" },
+  { label: "About", href: "/about" },
+];
+
+const year = new Date().getFullYear(); // build year
+const rowClass =
+  "group flex items-baseline justify-between gap-6 border-b border-line py-3.5 text-sm transition-colors duration-300";
+---
+
+<footer id="contact" class="mt-40 bg-night sm:mt-56">
+  <div class="wrap pt-14 pb-8 sm:pt-16">
+    <div class="grid gap-12 md:grid-cols-2 md:gap-24">
+      <!-- Contact -->
+      <div data-reveal>
+        <h2 class="heading-lg">Contact</h2>
+        <ul class="mt-6 border-t border-line">
+          {contact.map((item) => (
+            <li>
+              {item.href ? (
+                <a
+                  href={item.href}
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  class:list={[rowClass, "hover:text-signal"]}
+                >
+                  <span>{item.label}</span>
+                  <span class="text-ash transition-colors duration-300 group-hover:text-signal">
+                    {item.value}
+                  </span>
+                </a>
+              ) : (
+                <div class={rowClass}>
+                  <span>{item.label}</span>
+                  <span class="text-ash">{item.value}</span>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Navigation -->
+      <nav aria-label="Footer" data-reveal>
+        <h2 class="heading-lg">Navigation</h2>
+        <ul class="mt-6 border-t border-line">
+          {navigation.map((item) => (
+            <li>
+              <a href={item.href} class:list={[rowClass, "hover:text-signal"]}>
+                <span>{item.label}</span>
+                <span
+                  aria-hidden="true"
+                  class="text-ash transition-transform duration-300 group-hover:translate-x-1 group-hover:text-signal"
+                >
+                  →
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Copyright bar -->
+    <div class="mt-14 flex flex-col gap-3 sm:flex-row sm:justify-between">
+      <p class="label text-ash">© {year} Quinten van der Vlies</p>
+      <p class="label text-ash">Designed <span class="text-dust">&amp;</span> developed by Quinten van der Vlies</p>
+    </div>
+  </div>
+</footer>

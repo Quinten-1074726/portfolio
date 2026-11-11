@@ -43,9 +43,9 @@ const backgrounds = [
 ---
 
 <BaseLayout title="Styleguide" description="Design tokens test page">
-  <main class="mx-auto max-w-5xl space-y-28 px-6 py-24">
+  <main class="wrap space-y-28 pt-36 sm:pt-44">
     <header class="space-y-5" data-reveal-stagger>
-      <p class="label text-ash">00 // Styleguide</p>
+      <p class="label text-ash">Styleguide</p>
       <h1 class="heading-xl">Design tokens</h1>
       <p class="max-w-[65ch] leading-relaxed text-ash">
         Colours, typography and the glass button, collected on one page to judge the look and feel.
@@ -55,7 +55,7 @@ const backgrounds = [
 
     <!-- 01: Colours -->
     <section class="space-y-12">
-      <p class="label text-ash" data-reveal>01 // Colours</p>
+      <p class="label text-ash" data-reveal>Colours</p>
 
       {colorGroups.map(({ group, items }) => (
         <div class="space-y-4">
@@ -90,19 +90,19 @@ const backgrounds = [
 
     <!-- 02: Typography -->
     <section class="space-y-12">
-      <p class="label text-ash" data-reveal>02 // Typography</p>
+      <p class="label text-ash" data-reveal>Typography</p>
 
       <div class="space-y-10 border-t border-line pt-10" data-reveal-stagger>
         <div class="space-y-3">
-          <p class="label text-ash">heading-xl · Inter Tight 300</p>
+          <p class="label text-ash">heading-xl · display font</p>
           <p class="heading-xl">Quinten van der Vlies</p>
         </div>
         <div class="space-y-3">
-          <p class="label text-ash">heading-lg · Inter Tight 300</p>
-          <p class="heading-lg">Front-end developer</p>
+          <p class="label text-ash">heading-lg · display font</p>
+          <p class="heading-lg">Creative developer</p>
         </div>
         <div class="space-y-3">
-          <p class="label text-ash">heading-md · Inter Tight 400</p>
+          <p class="label text-ash">heading-md · display font</p>
           <p class="heading-md">Selected projects</p>
         </div>
       </div>
@@ -122,14 +122,14 @@ const backgrounds = [
       <div class="space-y-5 border-t border-line pt-10" data-reveal>
         <p class="label text-ash">Mono labels · JetBrains Mono · uppercase</p>
         <div class="flex flex-wrap gap-x-10 gap-y-4">
-          <span class="label">01 // 04</span>
+          <span class="label">Label</span>
           <span class="label text-ash">2026</span>
           <span class="label text-ash">React · Tailwind</span>
           <span class="label text-smoke">Smoke label</span>
           <span class="label text-[#7a7e86]">Smoke proposal</span>
           <span class="label inline-flex items-center gap-2 text-ash">
             <span class="size-1.5 rounded-full bg-signal"></span>
-            Available for internship
+            Available
           </span>
         </div>
       </div>
@@ -146,9 +146,25 @@ const backgrounds = [
       </div>
     </section>
 
-    <!-- 03: Glass button -->
+    <!-- Heading font comparison. TODO: remove after choosing a font -->
+    <section class="space-y-12">
+      <p class="label text-ash" data-reveal>Heading font candidates</p>
+      {[
+        { name: "Space Grotesk (current)", family: "'Space Grotesk Variable'", note: "technical, closest to PP Telegraf (chriskalafatis.com)" },
+        { name: "Host Grotesk", family: "'Host Grotesk Variable'", note: "neutral grotesk, close to Neue Haas (rogierdeboeve.com)" },
+        { name: "Schibsted Grotesk", family: "'Schibsted Grotesk Variable'", note: "neutral grotesk with a bit more character" },
+        { name: "Geist", family: "'Geist Variable'", note: "modern and clean" },
+      ].map((font) => (
+        <div class="space-y-4" data-reveal>
+          <p class="label text-ash">{font.name} · <span class="normal-case tracking-normal">{font.note}</span></p>
+          <p class="heading-display" style={`font-family: ${font.family}`}>Quinten van der Vlies</p>
+        </div>
+      ))}
+    </section>
+
+    <!-- Glass button -->
     <section class="space-y-6">
-      <p class="label text-ash" data-reveal>03 // Glass button</p>
+      <p class="label text-ash" data-reveal>Glass button</p>
       <div data-reveal class="relative overflow-hidden rounded-2xl border border-line bg-night px-6 py-20">
         <!-- Temporary glow so the blur has something to show. The real glow comes with the background (step 3). -->
         <div class="pointer-events-none absolute -left-16 top-1/2 size-72 -translate-y-1/2 rounded-full bg-signal/35 blur-3xl"></div>

@@ -1,0 +1,37 @@
+---
+// One project as a clickable row: title left, meta + arrow right.
+// The summary slides open on hover / keyboard focus (always visible on touch screens).
+// Usage: <ProjectRow title="SonarPop" summary="..." meta={["React", "Chart.js"]} href="/projects/sonarpop" />
+const { title, summary, meta = [], href } = Astro.props;
+
+// Shared "open" state: hover, keyboard focus, and always on devices without hover (touch)
+const open = "group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr] [@media(hover:none)]:grid-rows-[1fr]";
+const openText = "group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:none)]:opacity-100";
+---
+
+<a href={href} class="group block border-b border-line py-5 sm:py-6">
+  <span class="flex items-baseline justify-between gap-6">
+    <span class="font-display text-2xl tracking-tight transition-colors duration-300 group-hover:text-signal sm:text-3xl">
+      {title}
+    </span>
+
+    <span class="flex shrink-0 items-baseline gap-6">
+      <span class="label hidden text-ash sm:inline">{meta.join(" · ")}</span>
+      <span
+        aria-hidden="true"
+        class="text-ash transition-transform duration-300 group-hover:translate-x-1.5 group-hover:text-signal"
+      >
+        →
+      </span>
+    </span>
+  </span>
+
+  <!-- Height animates from 0 to auto via grid rows (0fr → 1fr) -->
+  <span class:list={["grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out", open]}>
+    <span class="overflow-hidden">
+      <span class:list={["block max-w-[60ch] pt-3 leading-relaxed text-ash opacity-0 transition-opacity duration-500", openText]}>
+        {summary}
+      </span>
+    </span>
+  </span>
+</a>

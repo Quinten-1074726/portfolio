@@ -2,6 +2,12 @@
 @import "@fontsource-variable/inter-tight";
 @import "@fontsource-variable/jetbrains-mono";
 
+/* Heading font candidates (compare on /styleguide). TODO: keep one, remove the others + npm uninstall */
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/host-grotesk";
+@import "@fontsource-variable/schibsted-grotesk";
+@import "@fontsource-variable/geist";
+
 @import "tailwindcss";
 
 /* `light:` variant, e.g. class="light:hidden" applies only in light mode */
@@ -27,7 +33,7 @@
   --color-signal: #6f9bff;
   --color-signal-dim: #3d5a99;
 
-  /* Optional second accent: warm dust, very limited use */
+  /* Second accent: warm dust, subtle details only (section "//", text selection, hover rim) */
   --color-dust: #c9a27e;
 
   /* Lines and glass */
@@ -41,11 +47,12 @@
     inset 0 1px 0 rgb(255 255 255 / 0.12),
     0 8px 24px rgb(0 0 0 / 0.35);
   --shadow-glass-hover:
-    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    inset 0 1px 0 rgb(232 200 168 / 0.32),   /* warm dust rim on hover */
     0 0 24px rgb(111 155 255 / 0.2);
 
   /* Fonts */
-  --font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif; /* headings */
+  --font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;     /* body text */
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
 }
 
@@ -82,7 +89,7 @@
       inset 0 1px 0 rgb(255 255 255 / 0.8),
       0 8px 24px rgb(20 22 26 / 0.08);
     --shadow-glass-hover:
-      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      inset 0 1px 0 rgb(201 162 126 / 0.45),   /* warm dust rim on hover */
       0 0 24px rgb(47 91 196 / 0.18);
   }
 }
@@ -98,6 +105,12 @@
     transition: background-color 300ms ease, color 300ms ease;
   }
 
+  /* Selected text: subtle warm dust highlight */
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-dust) 35%, transparent);
+    color: var(--color-bone);
+  }
+
   /* Visible blue focus state for keyboard users */
   :focus-visible {
     outline: 2px solid var(--color-signal);
@@ -105,8 +118,25 @@
   }
 }
 
-/* Type styles: large, light headings with tight letter spacing */
+/* Wide page container: use on every section instead of max-w-* + mx-auto + px-* */
+@utility wrap {
+  width: 100%;
+  max-width: 110rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 4rem);
+}
+
+/* Type styles: large, light headings in the display font with tight letter spacing */
+@utility heading-display {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 13.5vw, 15rem);
+  line-height: 0.9;
+  font-weight: 400;
+  letter-spacing: -0.05em;
+}
+
 @utility heading-xl {
+  font-family: var(--font-display);
   font-size: clamp(2.75rem, 7vw, 5.5rem);
   line-height: 1;
   font-weight: 300;
@@ -114,6 +144,7 @@
 }
 
 @utility heading-lg {
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.05;
   font-weight: 300;
@@ -121,6 +152,7 @@
 }
 
 @utility heading-md {
+  font-family: var(--font-display);
   font-size: 1.5rem;
   line-height: 1.2;
   font-weight: 400;
@@ -165,10 +197,39 @@
   transform: none;
 }
 
+/* Line reveal for big titles on page load: each line slides up from behind a mask.
+   Usage: <span class="line-mask"><span class="line-up" style="--line-delay: 100ms">Text</span></span>
+   Pure CSS animation, runs automatically on load. */
+@utility line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em; /* room for descenders (g, j, p) */
+  margin-bottom: -0.08em;
+}
+
+@utility line-up {
+  display: block;
+  animation: line-up 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--line-delay, 0ms);
+}
+
+@keyframes line-up {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .js [data-reveal] {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .line-up {
+    animation: none;
   }
 }

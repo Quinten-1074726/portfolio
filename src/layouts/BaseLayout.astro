@@ -1,8 +1,9 @@
 ---
 // Shared page shell: <head>, global styles and the page content (<slot />).
-// Footer, background and View Transitions are added in later steps.
+// Background and View Transitions are added in later steps.
 import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
 
 const { title, description = "TODO: site description" } = Astro.props;
 ---
@@ -30,6 +31,7 @@ const { title, description = "TODO: site description" } = Astro.props;
   <body>
     <Navbar />
     <slot />
+    <Footer />
 
     <!-- Bundled by Astro, runs after the page has loaded -->
     <script>

@@ -1,12 +1,93 @@
 ---
-// Temporary home page. The real home page is built in step 8.
+// Home page: name, three projects, short about. Footer comes from BaseLayout.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import GlassButton from "../components/GlassButton.astro";
+import SkillTree from "../components/SkillTree.astro";
+
+// Temporary project data. In step 5 this comes from the content collection (src/content/projects).
+// Summaries are a draft based on CLAUDE.md. TODO: check texts, link to detail pages.
+const projects = [
+  {
+    title: "SonarPop",
+    summary: "React dashboard for visualising sonar data, connected to a backend API and an AI model.",
+    meta: ["React", "Chart.js"],
+    href: "/projects",
+  },
+  {
+    title: "CineMatch",
+    summary: "AI agent that helps you choose a film, using document retrieval, tools and the OMDb API.",
+    meta: ["Azure OpenAI", "OMDb API"],
+    href: "/projects",
+  },
+  {
+    title: "CineFind",
+    summary: "App to find cinemas and theatres in the Netherlands, with search, filters and a map.",
+    meta: ["React Native", "Expo"],
+    href: "/projects",
+  },
+];
 ---
 
-<BaseLayout title="Portfolio">
-  <main class="grid min-h-screen place-items-center px-6">
-    <a data-reveal href="/styleguide" class="label text-ash transition-colors hover:text-signal">
-      TODO: home page · view styleguide →
-    </a>
+<BaseLayout title="Quinten van der Vlies · Creative developer" description="TODO: site description">
+  <main>
+    <!-- Name: each line slides up on page load (line-mask + line-up in global.css) -->
+    <section class="wrap pt-36 sm:pt-44">
+      <h1 class="heading-display">
+        <span class="line-mask"><span class="line-up">Quinten</span></span>
+        <span class="line-mask"><span class="line-up" style="--line-delay: 120ms">van der Vlies</span></span>
+      </h1>
+
+      <div class="mt-10 flex flex-col gap-6 sm:mt-14 sm:flex-row sm:items-end sm:justify-between">
+        <p class="heading-md text-ash" data-reveal style="--reveal-delay: 550ms">Creative developer</p>
+        <p class="max-w-[42ch] leading-relaxed text-ash" data-reveal style="--reveal-delay: 680ms">
+          TODO: short intro (1–2 sentences) about who you are and what you build.
+        </p>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="wrap pt-40 sm:pt-56">
+      <h2 class="heading-xl" data-reveal>Projects</h2>
+
+      <div class="mt-8 sm:mt-10" data-reveal-stagger>
+        {projects.map((project) => (
+          <ProjectRow
+            title={project.title}
+            summary={project.summary}
+            meta={project.meta}
+            href={project.href}
+          />
+        ))}
+      </div>
+
+      <div class="mt-12" data-reveal>
+        <GlassButton href="/projects">Discover more →</GlassButton>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="wrap pt-40 sm:pt-56">
+      <div class="grid gap-10 md:grid-cols-2 md:gap-16">
+        <h2 class="heading-xl" data-reveal>About</h2>
+
+        <div data-reveal>
+          <p class="max-w-[52ch] text-lg leading-relaxed text-ash">
+            TODO: short about text (2–3 sentences): who you are, what you like to build, what drives you.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <GlassButton href="/about">More about me</GlassButton>
+            <GlassButton href="/timeline">Timeline</GlassButton>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-20 sm:mt-28">
+        <h3 class="heading-md" data-reveal>Skills</h3>
+        <div class="mt-8">
+          <SkillTree />
+        </div>
+      </div>
+    </section>
   </main>
 </BaseLayout>
