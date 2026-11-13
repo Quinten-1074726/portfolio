@@ -1,0 +1,26 @@
+---
+// Thin row for experience / education: title + organisation left, period (+ status) right, short text below.
+// Usage: <InfoRow title="Job title" organisation="Company" period="2023 – 2024" status="Completed" text="One sentence." />
+const { title, organisation, period, status, text } = Astro.props;
+const inProgress = status === "In progress";
+---
+
+<div class="group border-b border-line py-6 sm:py-7">
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+    <div>
+      <h3 class="heading-md transition-colors duration-300 group-hover:text-signal">{title}</h3>
+      {organisation && <p class="mt-1 text-ash">{organisation}</p>}
+    </div>
+
+    <div class="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2 sm:flex-col sm:items-end">
+      {period && <p class="label text-dust">{period}</p>}
+      {status && (
+        <p class:list={["label inline-flex items-center gap-2", inProgress ? "text-bone" : "text-ash"]}>
+          {inProgress && <span aria-hidden="true" class="size-1.5 rounded-full bg-signal"></span>}
+          {status}
+        </p>
+      )}
+    </div>
+  </div>
+  {text && <p class="mt-3 max-w-[60ch] leading-relaxed text-ash">{text}</p>}
+</div>

@@ -1,0 +1,58 @@
+---
+// Page loader: logo + counter 000 → 100 + thin progress line, then the screen slides up.
+// Only shown when <html> has the class "is-loading" (first visit per session, set in BaseLayout).
+// The counter is decorative (about 1 second); it does not measure real loading.
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+---
+
+<div data-page-loader aria-hidden="true" class="page-loader fixed inset-0 z-[100] flex-col items-center justify-center gap-8 bg-void">
+  <Image
+    src={logo}
+    alt=""
+    width={80}
+    densities={[1, 2]}
+    loading="eager"
+    class="loader-logo size-16 rounded-lg light:invert sm:size-20"
+  />
+  <div class="flex w-40 flex-col items-center gap-3">
+    <span data-loader-count class="label tabular-nums text-ash">000</span>
+    <span class="block h-px w-full overflow-hidden bg-line">
+      <span data-loader-bar class="block h-full w-full origin-left scale-x-0 bg-signal"></span>
+    </span>
+  </div>
+</div>
+
+<script>
+  const loader = document.querySelector("[data-page-loader]");
+  const root = document.documentElement;
+
+  if (loader && root.classList.contains("is-loading")) {
+    const count = loader.querySelector("[data-loader-count]");
+    const bar = loader.querySelector("[data-loader-bar]");
+    const DURATION = 900; // ms for the counter
+    const start = performance.now();
+
+    const finish = () => {
+      loader.classList.add("is-leaving"); // keeps it visible while it slides up
+      root.classList.remove("is-loading"); // page animations (name, reveals) start now
+      document.dispatchEvent(new Event("loader:done"));
+      const remove = () => loader.remove();
+      loader.addEventListener("transitionend", remove, { once: true });
+      setTimeout(remove, 1200); // fallback
+    };
+
+    const tick = (now) => {
+      const progress = Math.min((now - start) / DURATION, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // fast start, slow end
+      count.textContent = String(Math.round(eased * 100)).padStart(3, "0");
+      bar.style.transform = `scaleX(${eased})`;
+      if (progress < 1) requestAnimationFrame(tick);
+      else setTimeout(finish, 150);
+    };
+
+    requestAnimationFrame(tick);
+  } else {
+    loader?.remove();
+  }
+</script>

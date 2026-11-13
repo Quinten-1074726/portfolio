@@ -1,5 +1,7 @@
 ---
-// Floating glass navbar. The links are pure HTML/CSS; only the theme toggle uses a small script.
+// Floating glass navbar.
+// - Rolling text on hover (CSS, .roll in global.css)
+// - A light "pill" glides to the hovered link and back to the active page (small script below)
 // Astro.url.pathname is the current URL path, used to mark the active page.
 import ThemeToggle from "./ThemeToggle.astro";
 
@@ -16,9 +18,16 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href) => (href === "/" ? path === "/" : path.startsWith(href));
 ---
 
-<header class="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
-  <nav aria-label="Main" class="glass flex items-center rounded-full p-1.5">
-    <ul class="flex items-center gap-0.5 sm:gap-1">
+<header class="fixed inset-x-0 top-4 z-50 flex justify-center px-4 sm:top-6">
+  <nav aria-label="Main" class="glass flex items-center rounded-full p-1.5 sm:p-2">
+    <ul data-nav-list class="relative flex items-center gap-0.5 sm:gap-1.5">
+      <!-- Gliding pill (positioned by the script). Invisible until the script places it. -->
+      <span
+        data-nav-pill
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-y-0 left-0 rounded-full bg-glass-hover opacity-0"
+      ></span>
+
       {links.map((link) => {
         const active = isActive(link.href);
         return (
@@ -27,11 +36,12 @@ const isActive = (href) => (href === "/" ? path === "/" : path.startsWith(href))
               href={link.href}
               aria-current={active ? "page" : undefined}
               class:list={[
-                "relative block rounded-full px-3 py-2 text-sm transition-colors duration-300 sm:px-4",
-                active ? "bg-glass-hover text-bone" : "text-ash hover:bg-glass hover:text-bone",
+                "group relative z-10 block rounded-full px-3 py-2 text-sm transition-colors duration-300 sm:px-6 sm:py-2.5 sm:text-[0.9375rem]",
+                // Without JS the active link has its own background; with JS the pill takes over
+                active ? "bg-glass-hover text-bone [.js_&]:bg-transparent" : "text-ash hover:text-bone",
               ]}
             >
-              {link.label}
+              <span class="roll"><span>{link.label}</span></span>
               {active && (
                 <span
                   aria-hidden="true"
@@ -44,7 +54,50 @@ const isActive = (href) => (href === "/" ? path === "/" : path.startsWith(href))
       })}
     </ul>
 
-    <span aria-hidden="true" class="mx-1 h-5 w-px bg-line sm:mx-1.5"></span>
+    <span aria-hidden="true" class="mx-1 h-5 w-px bg-line sm:mx-2 sm:h-6"></span>
     <ThemeToggle />
   </nav>
 </header>
+
+<script>
+  const list = document.querySelector("[data-nav-list]");
+  const pill = document.querySelector("[data-nav-pill]");
+
+  if (list && pill) {
+    const links = [...list.querySelectorAll("a")];
+    const active = list.querySelector('[aria-current="page"]');
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Place the pill behind a link (or hide it when there is none)
+    const moveTo = (link) => {
+      if (!link) {
+        pill.style.opacity = "0";
+        return;
+      }
+      pill.style.width = `${link.offsetWidth}px`;
+      pill.style.transform = `translateX(${link.offsetLeft}px)`;
+      pill.style.opacity = "1";
+    };
+
+    // First placement without animation, then turn transitions on
+    moveTo(active);
+    requestAnimationFrame(() => {
+      if (!reduceMotion) {
+        pill.style.transition =
+          "transform 500ms cubic-bezier(0.22, 1, 0.36, 1), width 500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease";
+      }
+    });
+
+    links.forEach((link) => {
+      link.addEventListener("mouseenter", () => moveTo(link));
+      link.addEventListener("focus", () => moveTo(link));
+    });
+    list.addEventListener("mouseleave", () => moveTo(active));
+    list.addEventListener("focusout", (event) => {
+      if (!list.contains(event.relatedTarget)) moveTo(active);
+    });
+    window.addEventListener("resize", () => moveTo(active));
+    // Link widths change once the web font has loaded: measure again
+    document.fonts?.ready.then(() => moveTo(active));
+  }
+</script>

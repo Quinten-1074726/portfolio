@@ -4,6 +4,8 @@
 import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import ScrollHint from "../components/ScrollHint.astro";
+import PageLoader from "../components/PageLoader.astro";
 
 const { title, description = "TODO: site description" } = Astro.props;
 ---
@@ -13,7 +15,7 @@ const { title, description = "TODO: site description" } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
 
@@ -26,17 +28,34 @@ const { title, description = "TODO: site description" } = Astro.props;
           document.documentElement.dataset.theme = "light";
         }
       } catch {}
+
+      // Page loader: only on the first visit in this browser session, never with reduced motion
+      try {
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!reduce && !sessionStorage.getItem("loaderSeen")) {
+          document.documentElement.classList.add("is-loading");
+          sessionStorage.setItem("loaderSeen", "1");
+        }
+      } catch {}
     </script>
   </head>
   <body>
+    <PageLoader />
     <Navbar />
     <slot />
     <Footer />
+    <ScrollHint />
 
     <!-- Bundled by Astro, runs after the page has loaded -->
     <script>
       import { initReveal } from "../scripts/reveal.js";
-      initReveal();
+
+      // Start the reveal animations right away, or after the page loader is gone
+      if (document.documentElement.classList.contains("is-loading")) {
+        document.addEventListener("loader:done", initReveal, { once: true });
+      } else {
+        initReveal();
+      }
     </script>
   </body>
 </html>

@@ -9,17 +9,20 @@ const open = "group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr] [@
 const openText = "group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:none)]:opacity-100";
 ---
 
-<a href={href} class="group block border-b border-line py-5 sm:py-6">
-  <span class="flex items-baseline justify-between gap-6">
-    <span class="font-display text-2xl tracking-tight transition-colors duration-300 group-hover:text-signal sm:text-3xl">
+<a href={href} class="group block border-b border-line py-7 sm:py-9">
+  <span class="flex items-center justify-between gap-6">
+    <!-- Big title that slides a little to the right on hover -->
+    <span
+      class="font-display text-[clamp(2rem,4.2vw,4rem)] font-light leading-none tracking-[-0.035em] transition duration-500 ease-out group-hover:translate-x-3 group-hover:text-signal"
+    >
       {title}
     </span>
 
-    <span class="flex shrink-0 items-baseline gap-6">
+    <span class="flex shrink-0 items-center gap-8">
       <span class="label hidden text-ash sm:inline">{meta.join(" · ")}</span>
       <span
         aria-hidden="true"
-        class="text-ash transition-transform duration-300 group-hover:translate-x-1.5 group-hover:text-signal"
+        class="text-2xl text-ash transition duration-500 ease-out group-hover:translate-x-2 group-hover:text-signal sm:text-4xl"
       >
         →
       </span>
@@ -29,7 +32,7 @@ const openText = "group-hover:opacity-100 group-focus-visible:opacity-100 [@medi
   <!-- Height animates from 0 to auto via grid rows (0fr → 1fr) -->
   <span class:list={["grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out", open]}>
     <span class="overflow-hidden">
-      <span class:list={["block max-w-[60ch] pt-3 leading-relaxed text-ash opacity-0 transition-opacity duration-500", openText]}>
+      <span class:list={["block max-w-[60ch] pt-4 text-lg leading-relaxed text-ash opacity-0 transition-opacity duration-500", openText]}>
         {summary}
       </span>
     </span>

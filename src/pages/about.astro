@@ -1,11 +1,110 @@
 ---
-// Placeholder page, built in a later step.
+// About page: intro story + photo, education, internships, experience, skill tree, qualities.
+// CV data lives in src/data/cv.js, skills in src/data/skills.js.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import GlassButton from "../components/GlassButton.astro";
+import InfoRow from "../components/InfoRow.astro";
+import SkillTree from "../components/SkillTree.astro";
+import { education, internships, experience, qualities } from "../data/cv.js";
+import { Image } from "astro:assets";
+import portrait from "../assets/quinten.png";
+
+// Shared layout for the sections below: heading left (sticky on large screens), content right
+const sectionGrid = "wrap grid gap-8 pt-32 sm:pt-44 lg:grid-cols-[1fr_2fr] lg:gap-16";
+const sectionHeading = "heading-xl lg:sticky lg:top-32 lg:self-start";
 ---
 
-<BaseLayout title="About">
-  <main class="wrap pt-36 sm:pt-44" data-reveal-stagger>
-    <h1 class="heading-xl">About</h1>
-    <p class="mt-6 text-ash">TODO: about, skills and contact (step 7)</p>
+<BaseLayout
+  title="About · Quinten van der Vlies"
+  description="About Quinten van der Vlies, a Dutch creative developer working where design and development meet."
+>
+  <main>
+    <!-- Intro + photo -->
+    <section class="wrap pt-32 sm:pt-40">
+      <div class="grid items-end gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-20">
+        <div>
+          <h1 class="heading-display uppercase">
+            <span class="line-mask"><span class="line-up">About</span></span>
+          </h1>
+
+          {/* Story: kept general on purpose (no school, project or tool names) so it stays true over time. */}
+          <div class="mt-10 max-w-[62ch]" data-reveal style="--reveal-delay: 400ms">
+            <p class="text-2xl leading-snug text-bone sm:text-3xl">
+              I'm Quinten, a Dutch <span class="text-signal">creative developer</span> who builds websites and apps
+              that look as good as they work.
+            </p>
+
+            <div class="mt-8 space-y-5 text-lg leading-relaxed text-ash">
+              <p>
+                With a background in both design and development, I enjoy the place where the two meet: figuring out
+                how something should look and feel, and then actually building it.
+              </p>
+              <p>
+                I'm most at home in the front end, but I'm always curious about what's next, especially when it comes
+                to AI.
+              </p>
+              <p>
+                When I'm not coding, I'm usually being creative in some other way, playing games, watching football or
+                lost in a good film or series.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-10 flex flex-wrap gap-3" data-reveal style="--reveal-delay: 550ms">
+            {/* Put the CV in public/cv.pdf: until then this link gives a 404 */}
+            <GlassButton href="/cv.pdf" target="_blank">Download CV</GlassButton>
+            <GlassButton href="#contact">Contact</GlassButton>
+          </div>
+        </div>
+
+        {/* Photo with a soft blue + warm glow behind it. <Image /> makes an optimised (WebP) version at build time. */}
+        <div class="relative w-full max-w-md justify-self-center" data-reveal style="--reveal-delay: 250ms">
+          <div aria-hidden="true" class="pointer-events-none absolute -top-10 -left-12 size-64 rounded-full bg-signal/25 blur-3xl"></div>
+          <div aria-hidden="true" class="pointer-events-none absolute -right-10 -bottom-12 size-56 rounded-full bg-dust/20 blur-3xl"></div>
+          <Image
+            src={portrait}
+            alt="Portrait of Quinten van der Vlies"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 1024px) 28rem, 100vw"
+            loading="eager"
+            class="relative aspect-[4/5] w-full rounded-2xl border border-line object-cover object-[70%_center]"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* Education, internships and experience: same layout, data from cv.js */}
+    {[
+      { heading: "Education", items: education },
+      { heading: "Internships", items: internships },
+      { heading: "Experience", items: experience },
+    ].map((group) => (
+      <section class={sectionGrid}>
+        <h2 class={sectionHeading} data-reveal>{group.heading}</h2>
+        <div class="border-t border-line" data-reveal-stagger>
+          {group.items.map((item) => <InfoRow {...item} />)}
+        </div>
+      </section>
+    ))}
+
+    <!-- Skills: full width (the tree needs the room) + general skills -->
+    <section class="wrap pt-32 sm:pt-44">
+      <h2 class="heading-xl" data-reveal>Skills</h2>
+      <div class="mt-10">
+        <SkillTree />
+
+        <div class="mt-20" data-reveal>
+          <h3 class="label text-ash">Qualities</h3>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {qualities.map((quality) => (
+              <li class="rounded-full border border-line px-4 py-2 text-sm text-ash transition-colors duration-300 hover:border-dust/50 hover:text-dust">
+                {quality}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
   </main>
 </BaseLayout>

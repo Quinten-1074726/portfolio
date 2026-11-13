@@ -1,0 +1,67 @@
+---
+// Skills panel: heading + legend, then compact tiles (icon + name + level) per category.
+// Data lives in src/data/skills.js.
+import { skillGroups, levels } from "../data/skills.js";
+import LevelMeter from "./LevelMeter.astro";
+---
+
+<div class="rounded-2xl border border-line bg-night p-5 sm:p-8" data-reveal>
+  <!-- Header: title left, legend right -->
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+    <h3 class="heading-md">Skills</h3>
+    <ul class="flex flex-wrap gap-x-5 gap-y-2">
+      {[3, 2, 1].map((level) => (
+        <li class="label inline-flex items-center gap-2 text-ash">
+          <LevelMeter level={level} />
+          {levels[level]}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Groups -->
+  <div class="mt-8 grid gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+    {skillGroups.map((group) => (
+      <div>
+        <h4 class="label text-ash">{group.name}</h4>
+        <ul class="mt-3 flex flex-wrap gap-1.5">
+          {group.skills.map((skill) => (
+            <li
+              class="group flex items-center gap-2 rounded-lg border border-line bg-graphite px-2.5 py-1.5 transition duration-300 hover:border-glass-border hover:bg-steel hover:shadow-[0_0_20px_rgb(255_255_255/0.05)]"
+              title={skill.level ? levels[skill.level] : "Level: TODO"}
+            >
+              <!-- Icon (Simple Icons path) or initials as fallback -->
+              {skill.icon ? (
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  class="size-3.5 shrink-0 fill-current text-ash transition-colors duration-300 group-hover:text-bone"
+                >
+                  <path d={skill.icon.path} />
+                </svg>
+              ) : (
+                <span
+                  aria-hidden="true"
+                  class="grid size-3.5 shrink-0 place-items-center font-mono text-[0.55rem] leading-none text-ash transition-colors duration-300 group-hover:text-bone"
+                >
+                  {skill.initials}
+                </span>
+              )}
+
+              <span class="text-[0.8125rem]">{skill.name}</span>
+
+              {skill.level ? (
+                <LevelMeter level={skill.level} />
+              ) : (
+                <span class="label text-dust">TODO</span>
+              )}
+
+              <!-- Level as text for screen readers -->
+              <span class="sr-only">{skill.level ? `, ${levels[skill.level]}` : ", level not set"}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</div>

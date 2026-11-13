@@ -1,13 +1,18 @@
 ---
 // Glass pill button. With `href` it renders a link (<a>), otherwise a <button>.
 // Usage: <GlassButton href="https://...">View live</GlassButton>
-const { href, type = "button", class: className } = Astro.props;
+// Extra attributes (target, aria-label, ...) are passed through via ...rest.
+const { href, type = "button", class: className, ...rest } = Astro.props;
 const Tag = href ? "a" : "button";
+// Links that open in a new tab get rel="noopener noreferrer" (safe default)
+const rel = rest.target === "_blank" ? "noopener noreferrer" : undefined;
 ---
 
 <Tag
   href={href}
   type={href ? undefined : type}
+  rel={rel}
+  {...rest}
   class:list={[
     "glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm text-bone",
     "transition duration-300 ease-out",

@@ -3,7 +3,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectRow from "../components/ProjectRow.astro";
 import GlassButton from "../components/GlassButton.astro";
-import SkillTree from "../components/SkillTree.astro";
+import Skills from "../components/Skills.astro";
 
 // Temporary project data. In step 5 this comes from the content collection (src/content/projects).
 // Summaries are a draft based on CLAUDE.md. TODO: check texts, link to detail pages.
@@ -31,23 +31,35 @@ const projects = [
 
 <BaseLayout title="Quinten van der Vlies · Creative developer" description="TODO: site description">
   <main>
-    <!-- Name: each line slides up on page load (line-mask + line-up in global.css) -->
-    <section class="wrap pt-36 sm:pt-44">
-      <h1 class="heading-display">
-        <span class="line-mask"><span class="line-up">Quinten</span></span>
-        <span class="line-mask"><span class="line-up" style="--line-delay: 120ms">van der Vlies</span></span>
-      </h1>
+    <!-- Name: "Quinten" top left with a small vertical "van der", "Vlies" bottom right.
+         Words slide up on page load (line-mask + line-up in global.css). -->
+    <section class="wrap min-h-[85svh] pt-32 sm:pt-40">
+      <!-- w-fit + mx-auto: the block is exactly as wide as the name and centred on the page.
+           Remove "mx-auto w-fit" to align it to the left again. -->
+      <div class="relative mx-auto w-fit">
+        <h1 class="heading-display uppercase">
+          <span class="flex items-start gap-[0.08em]">
+            <span class="line-mask"><span class="line-up">Quinten</span></span>
+            <span class="name-vertical" data-reveal style="--reveal-delay: 450ms">van der</span>
+          </span>
+          <!-- Indent in em (relative to the font size), so it scales with the name -->
+          <span class="flex pl-[3.2em]">
+            <span class="line-mask"><span class="line-up" style="--line-delay: 140ms">Vlies</span></span>
+          </span>
+        </h1>
 
-      <div class="mt-10 flex flex-col gap-6 sm:mt-14 sm:flex-row sm:items-end sm:justify-between">
-        <p class="heading-md text-ash" data-reveal style="--reveal-delay: 550ms">Creative developer</p>
-        <p class="max-w-[42ch] leading-relaxed text-ash" data-reveal style="--reveal-delay: 680ms">
-          TODO: short intro (1–2 sentences) about who you are and what you build.
-        </p>
+        <!-- Role + intro: below the name on mobile, in the empty space left of "Vlies" on larger screens -->
+        <div class="mt-10 xl:absolute xl:bottom-[0.6vw] xl:left-0 xl:mt-0 xl:w-[28vw] xl:max-w-[30rem]">
+          <p class="heading-md" data-reveal style="--reveal-delay: 600ms">Creative developer</p>
+          <p class="mt-3 max-w-[42ch] leading-relaxed text-ash" data-reveal style="--reveal-delay: 720ms">
+            TODO: short intro (1–2 sentences) about who you are and what you build.
+          </p>
+        </div>
       </div>
     </section>
 
-    <!-- Projects -->
-    <section class="wrap pt-40 sm:pt-56">
+    <!-- Projects (scroll-mt: leaves room for the navbar when jumping here) -->
+    <section id="projects" class="wrap scroll-mt-28 pt-24 sm:pt-32">
       <h2 class="heading-xl" data-reveal>Projects</h2>
 
       <div class="mt-8 sm:mt-10" data-reveal-stagger>
@@ -82,11 +94,8 @@ const projects = [
         </div>
       </div>
 
-      <div class="mt-20 sm:mt-28">
-        <h3 class="heading-md" data-reveal>Skills</h3>
-        <div class="mt-8">
-          <SkillTree />
-        </div>
+      <div class="mt-16 sm:mt-20">
+        <Skills />
       </div>
     </section>
   </main>

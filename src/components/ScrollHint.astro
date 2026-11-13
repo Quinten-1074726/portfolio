@@ -1,0 +1,60 @@
+---
+// Small floating "Scroll ↓" hint, centred at the bottom of the screen.
+// Click = go to the next section. Fades out at the bottom of the page.
+// Sections are `main > section` and the footer (see global.css for their scroll offset).
+---
+
+<!-- Outer element: position + fade out at the end (data-end).
+     Inner element: fade in on page load. Kept separate so the two opacity changes don't clash. -->
+<button
+  type="button"
+  data-scroll-hint
+  aria-label="Scroll to next section"
+  class="fixed bottom-5 left-1/2 z-40 -translate-x-1/2 text-ash transition-opacity duration-500 hover:text-bone data-[end=true]:pointer-events-none data-[end=true]:opacity-0 sm:bottom-7"
+>
+  <span class="flex animate-fade-in flex-col items-center gap-2 transition-colors duration-300 motion-reduce:animate-none">
+    <span class="label">Scroll</span>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class="size-4 animate-nudge motion-reduce:animate-none"
+    >
+      <path d="M12 5v14M6 13l6 6 6-6" />
+    </svg>
+  </span>
+</button>
+
+<script>
+  const button = document.querySelector("[data-scroll-hint]");
+  const NAV_OFFSET = 96; // same as scroll-margin-top in global.css (6rem)
+
+  if (button) {
+    const root = document.documentElement;
+    const sections = () => [...document.querySelectorAll("main > section, body > footer")];
+    // "End" = the footer is in view, or the page cannot scroll at all
+    const atEnd = () => {
+      const footer = document.querySelector("body > footer");
+      const footerInView = footer && footer.getBoundingClientRect().top < window.innerHeight - 40;
+      return footerInView || root.scrollHeight <= window.innerHeight + 40;
+    };
+
+    const update = () => {
+      button.dataset.end = String(atEnd());
+    };
+
+    button.addEventListener("click", () => {
+      // First section whose top is still below the navbar
+      const next = sections().find((el) => el.getBoundingClientRect().top > NAV_OFFSET + 8);
+      next?.scrollIntoView();
+    });
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  }
+</script>

@@ -1,44 +1,95 @@
 ---
-// Skills grouped per category, shown as a small terminal-style tree.
-// Draft based on CLAUDE.md and the project stacks. TODO: check, reorder and complete the lists.
-const groups = [
-  {
-    name: "Frontend",
-    skills: ["React", "React Router", "Tailwind CSS", "Framer Motion", "Alpine.js", "Chart.js", "Vite"],
-  },
-  {
-    name: "Mobile",
-    skills: ["React Native", "Expo", "NativeWind"],
-  },
-  {
-    name: "Backend",
-    skills: ["Node.js", "Express", "MongoDB", "Laravel", "REST APIs", "JWT auth"],
-  },
-  {
-    name: "AI",
-    skills: ["Azure OpenAI", "AI agents & tools", "Document retrieval"],
-  },
-  {
-    name: "Design & tools",
-    skills: ["TODO: e.g. design tools", "TODO: e.g. Git / GitHub"],
-  },
-];
+// Skill tree: root → category nodes → skill leaves, connected by thin branches.
+// The level shows as how strongly a leaf "lights up" (like unlocked nodes in a game) + the 3-bar meter.
+// Large screens (xl): one tree with 6 columns. Smaller screens: each category is its own small tree.
+// Data lives in src/data/skills.js. Leaf branches are drawn in CSS (.tree-leaf in global.css).
+import { skillGroups, levels } from "../data/skills.js";
+import LevelMeter from "./LevelMeter.astro";
+
+// How a leaf looks per level
+const leafStyle = {
+  3: "border-signal/40 text-bone shadow-[0_0_18px_rgb(111_155_255/0.22)]", // proficient: glows blue
+  2: "border-glass-border text-bone",                                    // comfortable: bright
+  1: "border-line text-ash",                                             // familiar: dimmed
+  null: "border-dashed border-line text-ash",                            // not set yet
+};
+
+// All branches sit at the same x-position (1.25rem = left-5) so they line up
+const BRANCH = "absolute left-5 w-px bg-branch";
 ---
 
-<div class="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-5" data-reveal-stagger>
-  {groups.map((group) => (
-    <div>
-      <h3 class="label text-bone">{group.name}</h3>
-      <ul class="mt-4 space-y-2 font-mono text-sm">
-        {group.skills.map((skill, index) => (
-          <li class="flex gap-2 text-ash">
-            <span aria-hidden="true" class="text-smoke">
-              {index === group.skills.length - 1 ? "└─" : "├─"}
-            </span>
-            <span>{skill}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  ))}
+<div>
+  <!-- Legend -->
+  <ul class="flex flex-wrap gap-x-6 gap-y-2" data-reveal>
+    {[3, 2, 1].map((level) => (
+      <li class="label inline-flex items-center gap-2 text-ash">
+        <span class:list={["size-2.5 rounded-full border bg-graphite", leafStyle[level]]}></span>
+        {levels[level]}
+      </li>
+    ))}
+  </ul>
+
+  <!-- Root (only on xl, where the tree is one piece) -->
+  <div class="mt-12 hidden flex-col items-center xl:flex" data-reveal>
+    <span class="label rounded-full border border-branch bg-night px-4 py-2 text-bone">Skill tree</span>
+    <span class="h-8 w-px bg-branch"></span>
+  </div>
+
+  <!-- Categories -->
+  <ul class="mt-10 grid gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:mt-0 xl:grid-cols-6">
+    {skillGroups.map((group, index) => {
+      const isFirst = index === 0;
+      const isLast = index === skillGroups.length - 1;
+      return (
+        <li class="relative pr-3 xl:pt-8">
+          <!-- xl: horizontal connector between the categories + drop line to this category -->
+          <span
+            aria-hidden="true"
+            class:list={[
+              "absolute top-0 hidden h-px bg-branch xl:block",
+              isFirst ? "left-5 right-0" : isLast ? "left-0 w-5" : "left-0 right-0",
+            ]}
+          ></span>
+          <span aria-hidden="true" class:list={[BRANCH, "top-0 hidden h-8 xl:block"]}></span>
+
+          <!-- Category node -->
+          <h3 class="relative inline-flex items-center gap-2 rounded-full border border-branch bg-night px-3.5 py-1.5" data-reveal>
+            <span class="label text-bone">{group.name}</span>
+            <span class="label text-ash">{group.skills.length}</span>
+          </h3>
+
+          <!-- Trunk from the category node down to the first leaf -->
+          <div class="relative h-3" aria-hidden="true"><span class:list={[BRANCH, "inset-y-0"]}></span></div>
+
+          <!-- Leaves -->
+          <ul data-reveal-stagger>
+            {group.skills.map((skill) => (
+              <li class="tree-leaf">
+                <span
+                  class:list={[
+                    "inline-flex items-center gap-2 rounded-lg border bg-graphite px-2.5 py-1.5 transition duration-300 hover:-translate-y-0.5 hover:bg-steel",
+                    leafStyle[skill.level ?? "null"],
+                  ]}
+                  title={skill.level ? levels[skill.level] : "Level: TODO"}
+                >
+                  {skill.icon ? (
+                    <svg viewBox="0 0 24 24" aria-hidden="true" class="size-3.5 shrink-0 fill-current">
+                      <path d={skill.icon.path} />
+                    </svg>
+                  ) : (
+                    <span aria-hidden="true" class="grid size-3.5 shrink-0 place-items-center font-mono text-[0.55rem] leading-none">
+                      {skill.initials}
+                    </span>
+                  )}
+                  <span class="text-[0.8125rem] leading-tight">{skill.name}</span>
+                  {skill.level ? <LevelMeter level={skill.level} /> : <span class="label text-dust">TODO</span>}
+                  <span class="sr-only">{skill.level ? `, ${levels[skill.level]}` : ", level not set"}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </li>
+      );
+    })}
+  </ul>
 </div>
