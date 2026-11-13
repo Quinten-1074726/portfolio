@@ -1,0 +1,66 @@
+---
+// One step on the timeline: year (only when it changes) | dot on the line | content.
+// Mobile: one column, line on the left (year column width = --year on the parent list).
+// md and up: line in the middle, content alternates left/right with the year on the other side.
+// side: "left" | "right" (only used from md up)
+import { typeLabels } from "../data/timeline.js";
+
+const { item, showYear, side = "right" } = Astro.props;
+const inProgress = item.status === "In progress" || /present/i.test(item.period);
+const isLeft = side === "left";
+const { title, url } = item;
+---
+
+<li class="group grid grid-cols-[var(--year)_2rem_1fr] pb-12 sm:pb-16 md:grid-cols-[1fr_3rem_1fr]" data-reveal>
+  <!-- Year (on the opposite side of the content from md up) -->
+  <span
+    class:list={[
+      "font-display text-xl leading-none font-light text-ash sm:text-3xl md:row-start-1",
+      isLeft ? "md:col-start-3 md:pl-8" : "md:col-start-1 md:pr-8 md:text-right",
+    ]}
+  >
+    {showYear ? item.year : ""}
+  </span>
+
+  <!-- Dot: white outline, blue and glowing for what is happening now -->
+  <span class="flex justify-center pt-1 md:col-start-2 md:row-start-1">
+    <span
+      class:list={[
+        "relative z-10 size-3 rounded-full border-2 transition-transform duration-300 group-hover:scale-125",
+        inProgress ? "border-signal bg-signal shadow-[0_0_14px_rgb(111_155_255/0.6)]" : "border-bone bg-void",
+      ]}
+    ></span>
+  </span>
+
+  <!-- Content -->
+  <div
+    class:list={[
+      "pl-2 sm:pl-4 md:row-start-1",
+      isLeft ? "md:col-start-1 md:pr-8 md:pl-0 md:text-right" : "md:col-start-3 md:pl-8",
+    ]}
+  >
+    <p class:list={["label flex flex-wrap gap-x-3 gap-y-1 text-ash", isLeft && "md:justify-end"]}>
+      <span>{typeLabels[item.type]}</span>
+      <span>{item.period}</span>
+    </p>
+    <h2 class="heading-md mt-3 transition-colors duration-300 group-hover:text-signal">
+      {url ? (
+        <a href={url} target="_blank" rel="noopener noreferrer" class="inline-flex items-baseline gap-1.5 underline-offset-4 hover:underline">
+          {title}<span aria-hidden="true" class="text-[0.7em] text-ash">↗</span><span class="sr-only"> (opens in a new tab)</span>
+        </a>
+      ) : (
+        title
+      )}
+    </h2>
+    {item.organisation && <p class="mt-1 text-ash">{item.organisation}</p>}
+    {item.status && (
+      <p class:list={["label mt-3 inline-flex items-center gap-2", inProgress ? "text-bone" : "text-ash"]}>
+        {inProgress && <span aria-hidden="true" class="size-1.5 rounded-full bg-signal"></span>}
+        {item.status}
+      </p>
+    )}
+    {item.text && (
+      <p class:list={["mt-3 max-w-[60ch] leading-relaxed text-ash", isLeft && "md:ml-auto"]}>{item.text}</p>
+    )}
+  </div>
+</li>

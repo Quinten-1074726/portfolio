@@ -1,6 +1,6 @@
 # Portfolio Quinten van der Vlies
 
-Persoonlijke portfoliowebsite van **Quinten van der Vlies**, laatstejaars CMGT (Communication & Multimedia Design) aan de Hogeschool Rotterdam, met de minor Digital Humans. Doel van de site: een **afstudeerstage** vinden in **front-end development** en/of **AI**.
+Persoonlijke portfoliowebsite van **Quinten van der Vlies**, laatstejaars CMGT (Creative Media and Game Technologies) aan de Hogeschool Rotterdam, met de minor Digital Humans. Doel van de site: een **afstudeerstage** vinden in **front-end development** en/of **AI**.
 
 De site moet **professioneel en clean** zijn, met een eigen sfeer (zie "Look & feel") en **subtiele, soepele interacties**. Het draait om **styling en vibe**, niet om spectaculaire animaties.
 
@@ -272,3 +272,5 @@ _(Hier noteren wat onderweg besloten wordt: gekozen fonts, definitieve kleuren, 
 - **About-opbouw** (2026-11-13): kort, **tijdloos** verhaal bovenaan (geen opleidingen, scholen, projecten of tools noemen, zodat het niet steeds aangepast hoeft te worden) met openingszin "I'm Quinten, a Dutch creative developer…", design + development, front-end, nieuwsgierig naar AI, en interesses (creatief, games, voetbal, film/series) verwerkt in het verhaal. Geen aparte "Beyond code"-sectie. Daarna Education → Internships → Experience → Skills (tree) + Qualities.
 - **Contact** (2026-11-13): e-mail quintenvdvlies@gmail.com, LinkedIn, GitHub en Behance (als "Earlier design work", werk van het Grafisch Lyceum) in de footer.
 - **Logo + loader** (2026-11-13): QV-logo (`src/assets/logo.png`) links in de navbar (in light mode geïnverteerd; op mobiel vervangt het de Home-link) en als favicon. Page loader: logo + teller 000→100 + lijntje (~1 s), daarna schuift het scherm omhoog; alleen bij het eerste bezoek per sessie, nooit bij reduced motion.
+- **Timeline** (2026-11-13): één chronologische lijn (nieuwste eerst) met opleiding, stages en werk door elkaar, uit dezelfde data als About (`cv.js` → `timeline.js`). Alles wit, alleen wat nu loopt is blauw (gevuld en gloeiend); legenda toont alleen "Now". Jaartal alleen bij een nieuw jaar. De lijn vult zich (wit) tijdens het scrollen. Vanaf `md` staat de lijn in het midden en wisselen de stappen links/rechts af (jaartal aan de overkant); op mobiel één kolom met de lijn links. Anders dan About (lijsten per categorie), zodat het niet dubbel voelt.
+- **Hero-teksten** (2026-11-13): hero vult het eerste scherm (90svh). Rol "Creative developer" in mono, hoofdletters, ruime tracking. Tagline "Using creativity to bring design and code together in websites and apps that look and feel right." Rechtsonder alleen mono-labels "Based in the Netherlands" / "Design · Code" (geen knoppen, geen AI). About-preview opent met "Design-minded. Code-driven."

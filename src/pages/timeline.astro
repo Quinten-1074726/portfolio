@@ -1,11 +1,67 @@
 ---
-// Placeholder page, built in a later step.
+// Timeline: education, internships and work as one chronological path (newest first).
+// Data comes from src/data/cv.js (via src/data/timeline.js), the same as the About page.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import TimelineItem from "../components/TimelineItem.astro";
+import { timeline } from "../data/timeline.js";
+
+// Show the year only on the first item of each year
+const items = timeline.map((item, index) => ({
+  item,
+  showYear: index === 0 || timeline[index - 1].year !== item.year,
+}));
+
 ---
 
-<BaseLayout title="Timeline">
-  <main class="wrap pt-36 sm:pt-44" data-reveal-stagger>
-    <h1 class="heading-xl">Timeline</h1>
-    <p class="mt-6 text-ash">TODO: education and work (step 7)</p>
+<BaseLayout
+  title="Timeline · Quinten van der Vlies"
+  description="The path of Quinten van der Vlies so far: education, internships and work."
+>
+  <main class="wrap pt-32 sm:pt-40">
+    <h1 class="heading-display uppercase">
+      <span class="line-mask"><span class="line-up">Timeline</span></span>
+    </h1>
+
+    <div class="mt-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between" data-reveal style="--reveal-delay: 400ms">
+      <p class="max-w-[48ch] text-lg leading-relaxed text-ash">Education, internships and work, in one line.</p>
+      <p class="label inline-flex items-center gap-2 text-ash">
+        <span class="size-2.5 rounded-full bg-signal shadow-[0_0_10px_rgb(111_155_255/0.6)]"></span>
+        Now
+      </p>
+    </div>
+
+    <!-- Mobile: --year = width of the year column, the line sits in the dot column next to it.
+         md and up: the line is in the middle and the steps alternate left/right. -->
+    <ol data-timeline class="relative mt-20 [--year:3.5rem] sm:mt-28 sm:[--year:8rem]">
+      <span aria-hidden="true" class="absolute top-1 bottom-12 left-[calc(var(--year)+1rem)] w-px bg-branch md:left-1/2"></span>
+      <!-- Fill that grows while scrolling (script below) -->
+      <span
+        data-timeline-fill
+        aria-hidden="true"
+        class="absolute top-1 bottom-12 left-[calc(var(--year)+1rem)] w-px origin-top scale-y-0 bg-bone/60 md:left-1/2"
+      ></span>
+
+      {items.map(({ item, showYear }, index) => (
+        <TimelineItem item={item} showYear={showYear} side={index % 2 === 0 ? "left" : "right"} />
+      ))}
+    </ol>
   </main>
 </BaseLayout>
+
+<script>
+  // Fill the timeline line as you scroll through it (only transform, so it stays smooth)
+  const list = document.querySelector("[data-timeline]");
+  const fill = document.querySelector("[data-timeline-fill]");
+
+  if (list && fill) {
+    const update = () => {
+      const rect = list.getBoundingClientRect();
+      const reach = window.innerHeight * 0.6; // the fill follows a point at 60% of the screen height
+      const progress = Math.min(Math.max((reach - rect.top) / rect.height, 0), 1);
+      fill.style.transform = `scaleY(${progress})`;
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  }
+</script>

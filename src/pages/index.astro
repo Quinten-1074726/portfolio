@@ -29,11 +29,12 @@ const projects = [
 ];
 ---
 
-<BaseLayout title="Quinten van der Vlies · Creative developer" description="TODO: site description">
+<BaseLayout title="Quinten van der Vlies · Creative developer" description="Portfolio of Quinten van der Vlies, a Dutch creative developer working where design and development meet.">
   <main>
     <!-- Name: "Quinten" top left with a small vertical "van der", "Vlies" bottom right.
          Words slide up on page load (line-mask + line-up in global.css). -->
-    <section class="wrap min-h-[85svh] pt-32 sm:pt-40">
+    <!-- flex-col + mt-auto on the bottom bar: the bar sits at the bottom of the first screen -->
+    <section class="wrap flex min-h-[90svh] flex-col pt-32 pb-10 sm:pt-40">
       <!-- w-fit + mx-auto: the block is exactly as wide as the name and centred on the page.
            Remove "mx-auto w-fit" to align it to the left again. -->
       <div class="relative mx-auto w-fit">
@@ -50,11 +51,20 @@ const projects = [
 
         <!-- Role + intro: below the name on mobile, in the empty space left of "Vlies" on larger screens -->
         <div class="mt-10 xl:absolute xl:bottom-[0.6vw] xl:left-0 xl:mt-0 xl:w-[28vw] xl:max-w-[30rem]">
-          <p class="heading-md" data-reveal style="--reveal-delay: 600ms">Creative developer</p>
-          <p class="mt-3 max-w-[42ch] leading-relaxed text-ash" data-reveal style="--reveal-delay: 720ms">
-            TODO: short intro (1–2 sentences) about who you are and what you build.
+          <!-- Role in the mono font: a technical "title card" contrast with the big name -->
+          <p class="font-mono text-base tracking-[0.25em] text-bone uppercase sm:text-xl" data-reveal style="--reveal-delay: 600ms">
+            Creative developer
+          </p>
+          <p class="mt-4 max-w-[40ch] text-lg leading-relaxed text-ash" data-reveal style="--reveal-delay: 720ms">
+            Using creativity to bring design and code together in websites and apps that look and feel right.
           </p>
         </div>
+      </div>
+
+      <!-- Bottom bar: small facts, bottom right of the first screen -->
+      <div class="mt-auto space-y-2 pt-16 sm:text-right" data-reveal style="--reveal-delay: 900ms">
+        <p class="label text-ash">Based in the Netherlands</p>
+        <p class="label text-ash">Design · Code</p>
       </div>
     </section>
 
@@ -84,8 +94,10 @@ const projects = [
         <h2 class="heading-xl" data-reveal>About</h2>
 
         <div data-reveal>
-          <p class="max-w-[52ch] text-lg leading-relaxed text-ash">
-            TODO: short about text (2–3 sentences): who you are, what you like to build, what drives you.
+          <p class="text-2xl leading-snug text-bone sm:text-3xl">Design-minded. Code-driven.</p>
+          <p class="mt-5 max-w-[52ch] text-lg leading-relaxed text-ash">
+            I'm Quinten, a creative developer with a background in both design and development. I care about the
+            details that make something feel right, and I'm always curious about what's next.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <GlassButton href="/about">More about me</GlassButton>

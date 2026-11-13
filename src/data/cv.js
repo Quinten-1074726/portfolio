@@ -1,12 +1,13 @@
 // CV data for the About page (education, experience, internships, qualities).
 // Source: Quinten's own CV, translated to English. Most recent first.
-// Each item: title, organisation, period, optional status and text (one sentence).
+// Each item: title, organisation, period, optional status, text (one sentence) and url (link to e.g. the study page).
 
 export const education = [
   {
-    title: "Communication & Multimedia Design (CMGT)",
+    title: "Creative Media and Game Technologies (CMGT)",
     organisation: "Hogeschool Rotterdam",
-    period: "2025 – 2027",
+    url: "https://www.hogeschoolrotterdam.nl/opleidingen/bachelor/creative-media-and-game-technologies/voltijd/",
+    period: "Sep 2025 – 2027", // year 4: minor Digital Humans, then the graduation internship
     status: "In progress",
   },
   {
@@ -62,19 +63,20 @@ export const internships = [
   {
     title: "Graduation internship",
     organisation: "BURORUW, Hendrik-Ido-Ambacht",
-    period: "Feb 2025",
+    period: "Feb 2025 – Jul 2025",
     status: "Completed",
+    text: "Graduation internship for the Associate Degree Software Developer.",
   },
   {
     title: "Intern",
     organisation: "Rocketboys, Dordrecht",
-    period: "Feb 2022",
+    period: "Feb 2022 – Jul 2022",
     status: "Completed",
   },
   {
     title: "Intern",
     organisation: "MEE TienPlus, Dordrecht",
-    period: "Sep 2021",
+    period: "Sep 2021 – Jan 2022",
     status: "Completed",
   },
 ];
