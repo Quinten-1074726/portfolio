@@ -402,6 +402,10 @@
   margin-top: 1.25em;
 }
 
+.case > :first-child {
+  margin-top: 0;
+}
+
 .case h2,
 .case h3 {
   font-family: var(--font-display);

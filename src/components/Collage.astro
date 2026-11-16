@@ -1,0 +1,21 @@
+---
+// Screenshot collage (masonry): columns in which every image keeps its own proportions,
+// so portrait phone screens and wide website screenshots mix without being cropped.
+// Usage: <Collage images={[img1, img2]} title="Vintro" />
+import { Image } from "astro:assets";
+
+const { images = [], title } = Astro.props;
+---
+
+<div class="columns-1 gap-6 sm:columns-2 xl:columns-3">
+  {images.map((image, index) => (
+    <Image
+      src={image}
+      alt={`${title} screenshot ${index + 1}`}
+      widths={[600, 1000, 1400]}
+      sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw"
+      class="mb-6 block w-full break-inside-avoid rounded-2xl border border-line"
+      data-reveal
+    />
+  ))}
+</div>

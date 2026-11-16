@@ -1,0 +1,21 @@
+---
+// Dashed box that shows where media should go. Only rendered in development (npm run dev),
+// so missing media never shows up on the live site.
+// Usage: <MediaPlaceholder label="Video preview" hint="Add video: /projects/x/preview.mp4" />
+const { label, hint, class: className } = Astro.props;
+---
+
+{import.meta.env.DEV && (
+  <div
+    class:list={[
+      "grid aspect-video w-full place-items-center rounded-2xl border border-dashed border-branch bg-night/50 p-6 text-center",
+      className,
+    ]}
+  >
+    <div>
+      <p class="label text-ash">{label}</p>
+      <p class="mt-3 font-mono text-xs text-ash">{hint}</p>
+      <p class="mt-3 text-xs text-ash">Only visible during development</p>
+    </div>
+  </div>
+)}

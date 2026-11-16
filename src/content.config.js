@@ -18,7 +18,10 @@ const projects = defineCollection({
       type: z.enum(["school", "team", "personal"]).optional(),
       stack: z.array(z.string()).default([]),
       cover: image().optional(), // image next to the .md file, e.g. ./sonarpop/cover.jpg
-      gallery: z.array(image()).default([]),
+      gallery: z.array(image()).default([]), // screenshots, e.g. [./sonarpop/1.jpg, ./sonarpop/2.jpg]
+      video: z.string().optional(), // preview video in public/, e.g. /projects/sonarpop/preview.mp4
+      designs: z.array(image()).default([]), // design images (e.g. exported from Figma)
+      figma: z.string().optional(), // link to the Figma file or prototype
       featured: z.boolean().default(false), // shown on the home page
       order: z.number().default(99), // tie-breaker when year and month are the same (lower = higher)
       repo: z.string().optional(), // "user/repo" on GitHub

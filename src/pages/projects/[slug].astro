@@ -1,12 +1,18 @@
 ---
 // Project detail page. [slug] in the file name = one page per project.
 // getStaticPaths() tells Astro which pages to build: one for every Markdown file in src/content/projects.
+// Order: header (summary + buttons | info + stack/languages) → About + preview → collage → design carousel → next project.
 import { render } from "astro:content";
 import { Image } from "astro:assets";
+import { siGithub, siFigma } from "simple-icons";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import GlassButton from "../../components/GlassButton.astro";
+import Chip from "../../components/Chip.astro";
+import Collage from "../../components/Collage.astro";
+import DesignCarousel from "../../components/DesignCarousel.astro";
+import MediaPlaceholder from "../../components/MediaPlaceholder.astro";
 import { getProjects, typeLabels } from "../../data/projects.js";
-import { getRepoInfo, formatMonth } from "../../data/github.js";
+import { getRepoInfo, languageColor } from "../../data/github.js";
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -17,19 +23,20 @@ export async function getStaticPaths() {
 }
 
 const { project, next } = Astro.props;
-const { title, summary, year, role, type, stack, cover, gallery, repo, live } = project.data;
-const { Content } = await render(project); // the Markdown body as a component
-const github = await getRepoInfo(repo); // languages + last update from GitHub (null if unavailable)
+const { title, summary, year, role, type, stack, cover, gallery, video, designs, figma, repo, live } = project.data;
+const { Content } = await render(project); // the Markdown body ("About the project") as a component
+const github = await getRepoInfo(repo); // languages from GitHub (null if unavailable)
+const slug = project.id;
 
-// Meta block rows (only the ones that are filled in)
-const meta = [
-  { label: "Role", value: role },
+// Info rows (only the ones that are filled in)
+const info = [
   { label: "Year", value: year },
+  { label: "Role", value: role },
   { label: "Type", value: type && typeLabels[type] },
-  { label: "Stack", value: stack.join(" · ") },
-  { label: "Languages", value: github?.languages.map((l) => `${l.name} ${l.percent}%`).join(" · ") },
-  { label: "Updated", value: github?.updated && formatMonth(github.updated) },
 ].filter((row) => row.value);
+
+const languages = github?.languages ?? [];
+const hasPreview = video || cover; // something to show next to "About the project"
 ---
 
 <BaseLayout title={`${title} · Quinten van der Vlies`} description={summary}>
@@ -42,62 +49,145 @@ const meta = [
       <span class="line-mask"><span class="line-up">{title}</span></span>
     </h1>
 
-    {cover && (
-      <Image
-        src={cover}
-        alt={`${title} cover`}
-        widths={[800, 1400, 2000]}
-        sizes="100vw"
-        loading="eager"
-        class="mt-12 w-full rounded-2xl border border-line"
-        data-reveal
-      />
-    )}
-
-    <!-- Summary + meta + buttons -->
-    <section class="mt-16 grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-20" data-reveal>
+    <!-- 1. Header: summary + buttons left | info, then stack and languages side by side, right -->
+    <section class="mt-14 grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-20" data-reveal style="--reveal-delay: 300ms">
       <div>
-        <p class="max-w-[50ch] text-2xl leading-snug text-bone sm:text-3xl">{summary}</p>
+        <p class="max-w-[46ch] text-2xl leading-snug text-bone sm:text-3xl">{summary}</p>
+
         {(repo || live) && (
           <div class="mt-10 flex flex-wrap gap-3">
+            {repo && (
+              <GlassButton href={`https://github.com/${repo}`} target="_blank" aria-label="View the code on GitHub (opens in a new tab)">
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="size-4 fill-current"><path d={siGithub.path} /></svg>
+                GitHub
+              </GlassButton>
+            )}
             {live && <GlassButton href={live} target="_blank">View live ↗</GlassButton>}
-            {repo && <GlassButton href={`https://github.com/${repo}`} target="_blank">View code ↗</GlassButton>}
           </div>
         )}
       </div>
 
-      <dl class="self-start border-t border-line">
-        {meta.map((row) => (
-          <div class="flex items-baseline justify-between gap-6 border-b border-line py-4">
-            <dt class="label text-ash">{row.label}</dt>
-            <dd class="text-right">{row.value}</dd>
+      <div class="self-start">
+        {info.length > 0 && (
+          <dl class="border-t border-line">
+            {info.map((row) => (
+              <div class="flex items-baseline justify-between gap-6 border-b border-line py-3.5">
+                <dt class="label text-ash">{row.label}</dt>
+                <dd class:list={["text-right", row.label === "Year" && "font-mono text-dust"]}>{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        <!-- Stack and languages next to each other -->
+        {(stack.length > 0 || languages.length > 0) && (
+          <div class="mt-8 grid grid-cols-2 gap-6">
+            <div>
+              <p class="label text-ash">Stack</p>
+              <div class="mt-3 flex flex-wrap gap-1.5">{stack.map((tool) => <Chip>{tool}</Chip>)}</div>
+            </div>
+            {languages.length > 0 && (
+              <div>
+                <p class="label text-ash">Languages</p>
+                <div class="mt-3 flex flex-wrap gap-1.5">
+                  {languages.map((language) => (
+                    <Chip>
+                      <span
+                        aria-hidden="true"
+                        class="mr-1.5 inline-block size-2 rounded-full align-middle"
+                        style={`background-color: ${languageColor(language.name)}`}
+                      ></span>
+                      {language.name} <span class="text-ash">{language.percent}%</span>
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        ))}
-      </dl>
+        )}
+      </div>
     </section>
 
-    <!-- Case study (Markdown body), narrow readable column -->
-    <article class="case mt-24 max-w-[65ch] sm:mt-32" data-reveal>
-      <Content />
-    </article>
+    <!-- 2. About the project (left) + preview: video, otherwise the cover (right) -->
+    <section
+      class:list={[
+        "mt-24 grid items-start gap-12 sm:mt-32",
+        (hasPreview || import.meta.env.DEV) && "lg:grid-cols-[1fr_1.3fr] lg:gap-20",
+      ]}
+    >
+      <article class="case max-w-[60ch]" data-reveal>
+        <Content />
+      </article>
 
-    <!-- Gallery -->
-    {gallery.length > 0 && (
-      <section class="mt-24 space-y-8">
-        {gallery.map((image, index) => (
+      <div class="relative" data-reveal style="--reveal-delay: 150ms">
+        <!-- Soft blue + warm glow behind the preview (same as behind the photo on About) -->
+        {hasPreview && (
+          <>
+            <div aria-hidden="true" class="pointer-events-none absolute -top-10 -left-10 size-64 rounded-full bg-signal/20 blur-3xl"></div>
+            <div aria-hidden="true" class="pointer-events-none absolute -right-8 -bottom-10 size-56 rounded-full bg-dust/15 blur-3xl"></div>
+          </>
+        )}
+        {video ? (
+          <video
+            src={video}
+            poster={cover?.src}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            data-preview-video
+            class="relative aspect-video w-full rounded-2xl border border-line bg-night object-cover"
+          ></video>
+        ) : cover ? (
           <Image
-            src={image}
-            alt={`${title} image ${index + 1}`}
-            widths={[800, 1400, 2000]}
-            sizes="100vw"
-            class="w-full rounded-2xl border border-line"
-            data-reveal
+            src={cover}
+            alt={`${title} preview`}
+            widths={[800, 1400]}
+            sizes="(min-width: 1024px) 55vw, 100vw"
+            loading="eager"
+            class="relative w-full rounded-2xl border border-line"
           />
-        ))}
+        ) : (
+          <MediaPlaceholder label="Preview (video or cover)" hint={`video: /projects/${slug}/preview.mp4  or  cover: ./${slug}/cover.jpg`} />
+        )}
+      </div>
+    </section>
+
+    <!-- 3. Collage of screenshots -->
+    {(gallery.length > 0 || import.meta.env.DEV) && (
+      <section class="mt-24 sm:mt-32">
+        {gallery.length > 0 ? (
+          <Collage images={gallery} title={title} />
+        ) : (
+          <MediaPlaceholder label="Screenshot collage" hint={`gallery: [./${slug}/1.jpg, ./${slug}/2.jpg, ...]  (next to the .md file)`} />
+        )}
       </section>
     )}
 
-    <!-- Next project -->
+    <!-- 4. Design carousel (only when there are designs; placeholder in dev) -->
+    {(designs.length > 0 || import.meta.env.DEV) && (
+      <section class="mt-24 sm:mt-32">
+        <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+          <h2 class="heading-lg">Design</h2>
+          {figma && (
+            <GlassButton href={figma} target="_blank">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="size-4 fill-current"><path d={siFigma.path} /></svg>
+              Open in Figma
+            </GlassButton>
+          )}
+        </div>
+        <div class="mt-10" data-reveal>
+          {designs.length > 0 ? (
+            <DesignCarousel images={designs} title={title} />
+          ) : (
+            <MediaPlaceholder label="Design carousel (optional)" hint={`designs: [./${slug}/design-1.png, ...]  and optionally  figma: https://www.figma.com/...`} />
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- 5. Next project -->
     <a href={`/projects/${next.id}`} class="group mt-32 block border-t border-line pt-10 sm:mt-44" data-reveal>
       <span class="label text-ash">Next project</span>
       <span class="mt-4 flex items-center justify-between gap-6">
@@ -111,3 +201,13 @@ const meta = [
     </a>
   </main>
 </BaseLayout>
+
+<script>
+  // Reduced motion: don't autoplay preview videos, show the controls instead
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll("[data-preview-video]").forEach((video) => {
+      video.pause();
+      video.controls = true;
+    });
+  }
+</script>

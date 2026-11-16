@@ -1,0 +1,44 @@
+---
+// Horizontal carousel for design images (e.g. Figma). Swipe / scroll on its own (CSS scroll-snap);
+// the two arrow buttons are a small extra (script below).
+// Usage: <DesignCarousel images={[img1, img2]} title="Vintro" />
+import { Image } from "astro:assets";
+
+const { images = [], title } = Astro.props;
+const arrowButton =
+  "glass grid size-11 place-items-center rounded-full text-bone transition duration-300 hover:bg-glass-hover active:scale-[0.96]";
+---
+
+<div data-carousel>
+  <div
+    data-carousel-track
+    class="flex snap-x snap-mandatory items-start gap-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:thin]"
+  >
+    {images.map((image, index) => (
+      <Image
+        src={image}
+        alt={`${title} design ${index + 1}`}
+        widths={[800, 1400]}
+        sizes="(min-width: 1024px) 45vw, 85vw"
+        class="w-[85%] shrink-0 snap-start rounded-2xl border border-line sm:w-[60%] lg:w-[45%]"
+      />
+    ))}
+  </div>
+
+  {images.length > 1 && (
+    <div class="mt-6 flex gap-2">
+      <button type="button" data-carousel-prev aria-label="Previous design" class={arrowButton}>←</button>
+      <button type="button" data-carousel-next aria-label="Next design" class={arrowButton}>→</button>
+    </div>
+  )}
+</div>
+
+<script>
+  // Arrow buttons scroll the track by most of its width (smooth via CSS scroll-behavior)
+  document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+    const track = carousel.querySelector("[data-carousel-track]");
+    const step = () => track.clientWidth * 0.8;
+    carousel.querySelector("[data-carousel-prev]")?.addEventListener("click", () => track.scrollBy({ left: -step() }));
+    carousel.querySelector("[data-carousel-next]")?.addEventListener("click", () => track.scrollBy({ left: step() }));
+  });
+</script>

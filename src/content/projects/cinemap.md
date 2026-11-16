@@ -1,5 +1,5 @@
 ---
-# CONCEPT: based on CLAUDE.md and the GitHub repo. TODO: Quinten checks.
+# CONCEPT (data + case text): based on CLAUDE.md and the GitHub repo. TODO: Quinten checks.
 title: CineMap
 summary: Laravel web app for films, with filters, a watchlist, an admin area and poster uploads.
 year: 2025
@@ -10,4 +10,6 @@ order: 5
 repo: Quinten-1074726/WAF-Praktijkopdracht-CineMap
 ---
 
-TODO: case study (context and problem, what you built, choices, result, what you learned).
+## About the project
+
+CineMap is a Laravel web app about films, styled with Tailwind CSS and Alpine.js.

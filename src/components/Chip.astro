@@ -1,0 +1,9 @@
+---
+// Small glass "bubble" for tools, languages and tags.
+// Usage: <Chip>React</Chip>  or  <Chip muted>+2</Chip>
+const { muted = false } = Astro.props;
+---
+
+<span class:list={["glass rounded-full px-3 py-1 text-xs whitespace-nowrap", muted ? "text-ash" : "text-bone"]}>
+  <slot />
+</span>

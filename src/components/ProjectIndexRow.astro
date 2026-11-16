@@ -5,6 +5,7 @@
 // summary + type and role (small mono line).
 // Usage: <ProjectIndexRow project={entry} />
 import { typeLabels } from "../data/projects.js";
+import Chip from "./Chip.astro";
 
 const { project } = Astro.props;
 const { title, summary, stack, type, role, year } = project.data;
@@ -45,9 +46,9 @@ const openText = "group-hover:opacity-100 group-focus-visible:opacity-100 [@medi
   <!-- Tech stack as glass chips -->
   <span class="flex max-w-[26rem] flex-wrap gap-1.5 md:justify-end">
     {chips.map((tool) => (
-      <span class="glass rounded-full px-3 py-1 text-xs whitespace-nowrap text-bone">{tool}</span>
+      <Chip>{tool}</Chip>
     ))}
-    {hiddenCount > 0 && <span class="glass rounded-full px-3 py-1 text-xs text-ash">+{hiddenCount}</span>}
+    {hiddenCount > 0 && <Chip muted>+{hiddenCount}</Chip>}
   </span>
 
   <span class="label hidden text-ash md:block md:text-right">{year}</span>

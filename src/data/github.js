@@ -47,6 +47,25 @@ export function getRepoInfo(repo) {
   return request;
 }
 
+// The colours GitHub itself uses for languages (small accent dots on the project page)
+const LANGUAGE_COLORS = {
+  JavaScript: "#f1e05a",
+  TypeScript: "#3178c6",
+  PHP: "#4f5d95",
+  Blade: "#f7523f",
+  HTML: "#e34c26",
+  CSS: "#663399",
+  SCSS: "#c6538c",
+  Python: "#3572a5",
+  Shell: "#89e051",
+  PowerShell: "#2671be", // a bit lighter than GitHub's, so it stays visible on dark
+  Astro: "#ff5a03",
+};
+
+export function languageColor(name) {
+  return LANGUAGE_COLORS[name] ?? "var(--color-ash)";
+}
+
 // "2026-03-19T10:00:00Z" → "Mar 2026"
 export function formatMonth(isoDate) {
   return new Date(isoDate).toLocaleDateString("en-GB", { month: "short", year: "numeric" });
