@@ -1,11 +1,35 @@
 ---
-// Placeholder page, built in a later step.
+// Project index: all projects from the content collection as a typographic table.
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectIndexRow from "../../components/ProjectIndexRow.astro";
+import { getProjects } from "../../data/projects.js";
+
+const projects = await getProjects(); // newest first
 ---
 
-<BaseLayout title="Projects">
-  <main class="wrap pt-36 sm:pt-44" data-reveal-stagger>
-    <h1 class="heading-xl">Projects</h1>
-    <p class="mt-6 text-ash">TODO: project index (step 6)</p>
+<BaseLayout
+  title="Projects · Quinten van der Vlies"
+  description="Selected projects by Quinten van der Vlies: websites, apps and AI experiments."
+>
+  <main class="wrap pt-32 sm:pt-40">
+    <h1 class="heading-display uppercase">
+      <span class="line-mask"><span class="line-up">Projects</span></span>
+    </h1>
+
+    <p class="mt-10 max-w-[48ch] text-lg leading-relaxed text-ash" data-reveal style="--reveal-delay: 400ms">
+      A selection of things I designed and built, from websites and apps to AI experiments.
+    </p>
+
+    <div class="mt-20 sm:mt-28">
+      <!-- Column headings (md and up) -->
+      <div class="label hidden justify-between border-b border-line pb-4 text-ash md:flex" data-reveal>
+        <span>Project</span>
+        <span class="pr-[4.5rem]">Stack / Year</span>
+      </div>
+
+      <div data-reveal-stagger>
+        {projects.map((project) => <ProjectIndexRow project={project} />)}
+      </div>
+    </div>
   </main>
 </BaseLayout>

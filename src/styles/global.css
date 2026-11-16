@@ -389,3 +389,70 @@
 .is-loading .animate-fade-in {
   animation-play-state: paused;
 }
+
+/* Case study text (Markdown body on project pages). Tailwind resets headings and lists,
+   so these give the Markdown a readable rhythm. */
+.case {
+  color: var(--color-ash);
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.case > * + * {
+  margin-top: 1.25em;
+}
+
+.case h2,
+.case h3 {
+  font-family: var(--font-display);
+  color: var(--color-bone);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-top: 2.5em;
+}
+
+.case h2 {
+  font-size: 1.75rem;
+}
+
+.case h3 {
+  font-size: 1.375rem;
+}
+
+.case strong {
+  color: var(--color-bone);
+  font-weight: 500;
+}
+
+.case a {
+  color: var(--color-bone);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.case a:hover {
+  color: var(--color-signal);
+}
+
+.case ul,
+.case ol {
+  padding-left: 1.25em;
+}
+
+.case ul {
+  list-style: disc;
+}
+
+.case ol {
+  list-style: decimal;
+}
+
+.case li + li {
+  margin-top: 0.4em;
+}
+
+.case code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--color-bone);
+}

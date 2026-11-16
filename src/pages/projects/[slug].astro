@@ -1,0 +1,113 @@
+---
+// Project detail page. [slug] in the file name = one page per project.
+// getStaticPaths() tells Astro which pages to build: one for every Markdown file in src/content/projects.
+import { render } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GlassButton from "../../components/GlassButton.astro";
+import { getProjects, typeLabels } from "../../data/projects.js";
+import { getRepoInfo, formatMonth } from "../../data/github.js";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, index) => ({
+    params: { slug: project.id }, // file name without .md, e.g. "sonarpop"
+    props: { project, next: projects[(index + 1) % projects.length] }, // next project wraps around to the first
+  }));
+}
+
+const { project, next } = Astro.props;
+const { title, summary, year, role, type, stack, cover, gallery, repo, live } = project.data;
+const { Content } = await render(project); // the Markdown body as a component
+const github = await getRepoInfo(repo); // languages + last update from GitHub (null if unavailable)
+
+// Meta block rows (only the ones that are filled in)
+const meta = [
+  { label: "Role", value: role },
+  { label: "Year", value: year },
+  { label: "Type", value: type && typeLabels[type] },
+  { label: "Stack", value: stack.join(" · ") },
+  { label: "Languages", value: github?.languages.map((l) => `${l.name} ${l.percent}%`).join(" · ") },
+  { label: "Updated", value: github?.updated && formatMonth(github.updated) },
+].filter((row) => row.value);
+---
+
+<BaseLayout title={`${title} · Quinten van der Vlies`} description={summary}>
+  <main class="wrap pt-32 sm:pt-40">
+    <a href="/projects" class="label inline-flex items-center gap-2 text-ash transition-colors hover:text-signal" data-reveal>
+      ← All projects
+    </a>
+
+    <h1 class="heading-display mt-8 uppercase">
+      <span class="line-mask"><span class="line-up">{title}</span></span>
+    </h1>
+
+    {cover && (
+      <Image
+        src={cover}
+        alt={`${title} cover`}
+        widths={[800, 1400, 2000]}
+        sizes="100vw"
+        loading="eager"
+        class="mt-12 w-full rounded-2xl border border-line"
+        data-reveal
+      />
+    )}
+
+    <!-- Summary + meta + buttons -->
+    <section class="mt-16 grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-20" data-reveal>
+      <div>
+        <p class="max-w-[50ch] text-2xl leading-snug text-bone sm:text-3xl">{summary}</p>
+        {(repo || live) && (
+          <div class="mt-10 flex flex-wrap gap-3">
+            {live && <GlassButton href={live} target="_blank">View live ↗</GlassButton>}
+            {repo && <GlassButton href={`https://github.com/${repo}`} target="_blank">View code ↗</GlassButton>}
+          </div>
+        )}
+      </div>
+
+      <dl class="self-start border-t border-line">
+        {meta.map((row) => (
+          <div class="flex items-baseline justify-between gap-6 border-b border-line py-4">
+            <dt class="label text-ash">{row.label}</dt>
+            <dd class="text-right">{row.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <!-- Case study (Markdown body), narrow readable column -->
+    <article class="case mt-24 max-w-[65ch] sm:mt-32" data-reveal>
+      <Content />
+    </article>
+
+    <!-- Gallery -->
+    {gallery.length > 0 && (
+      <section class="mt-24 space-y-8">
+        {gallery.map((image, index) => (
+          <Image
+            src={image}
+            alt={`${title} image ${index + 1}`}
+            widths={[800, 1400, 2000]}
+            sizes="100vw"
+            class="w-full rounded-2xl border border-line"
+            data-reveal
+          />
+        ))}
+      </section>
+    )}
+
+    <!-- Next project -->
+    <a href={`/projects/${next.id}`} class="group mt-32 block border-t border-line pt-10 sm:mt-44" data-reveal>
+      <span class="label text-ash">Next project</span>
+      <span class="mt-4 flex items-center justify-between gap-6">
+        <span class="heading-xl transition duration-500 ease-out group-hover:translate-x-3 group-hover:text-signal">
+          {next.data.title}
+        </span>
+        <span aria-hidden="true" class="text-4xl text-ash transition duration-500 group-hover:translate-x-2 group-hover:text-signal">
+          →
+        </span>
+      </span>
+    </a>
+  </main>
+</BaseLayout>

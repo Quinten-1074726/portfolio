@@ -1,0 +1,60 @@
+---
+// One row in the project index (/projects).
+// Left: big title. Right: tech stack as glass chips, year, arrow.
+// On hover (or keyboard focus; always on touch screens) extra info opens below the title:
+// summary + type and role (small mono line).
+// Usage: <ProjectIndexRow project={entry} />
+import { typeLabels } from "../data/projects.js";
+
+const { project } = Astro.props;
+const { title, summary, stack, type, role, year } = project.data;
+
+const MAX_CHIPS = 4;
+const chips = stack.slice(0, MAX_CHIPS);
+const hiddenCount = stack.length - chips.length;
+
+// Small facts shown with the summary
+const facts = [type && `${typeLabels[type]} project`, role].filter(Boolean);
+
+// Same "open" state as ProjectRow on the home page
+const open = "group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr] [@media(hover:none)]:grid-rows-[1fr]";
+const openText = "group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:none)]:opacity-100";
+---
+
+<a
+  href={`/projects/${project.id}`}
+  class="group grid gap-x-8 gap-y-4 border-b border-line py-7 sm:py-9 md:grid-cols-[1fr_auto_4rem_2rem] md:items-center"
+>
+  <!-- Title + extra info on hover -->
+  <span>
+    <span
+      class="block font-display text-[clamp(1.875rem,3.8vw,3.5rem)] leading-none font-light tracking-[-0.035em] transition duration-500 ease-out group-hover:translate-x-3 group-hover:text-signal"
+    >
+      {title}
+    </span>
+    <span class:list={["grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out", open]}>
+      <span class="overflow-hidden">
+        <span class:list={["block pt-4 opacity-0 transition-opacity duration-500", openText]}>
+          <span class="block max-w-[55ch] leading-relaxed text-ash">{summary}</span>
+          {facts.length > 0 && <span class="label mt-3 block text-ash">{facts.join(" · ")}</span>}
+        </span>
+      </span>
+    </span>
+  </span>
+
+  <!-- Tech stack as glass chips -->
+  <span class="flex max-w-[26rem] flex-wrap gap-1.5 md:justify-end">
+    {chips.map((tool) => (
+      <span class="glass rounded-full px-3 py-1 text-xs whitespace-nowrap text-bone">{tool}</span>
+    ))}
+    {hiddenCount > 0 && <span class="glass rounded-full px-3 py-1 text-xs text-ash">+{hiddenCount}</span>}
+  </span>
+
+  <span class="label hidden text-ash md:block md:text-right">{year}</span>
+  <span
+    aria-hidden="true"
+    class="hidden text-2xl text-ash transition duration-500 ease-out group-hover:translate-x-2 group-hover:text-signal md:block"
+  >
+    →
+  </span>
+</a>

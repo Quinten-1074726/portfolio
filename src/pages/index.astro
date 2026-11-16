@@ -4,29 +4,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectRow from "../components/ProjectRow.astro";
 import GlassButton from "../components/GlassButton.astro";
 import Skills from "../components/Skills.astro";
+import { getProjects } from "../data/projects.js";
 
-// Temporary project data. In step 5 this comes from the content collection (src/content/projects).
-// Summaries are a draft based on CLAUDE.md. TODO: check texts, link to detail pages.
-const projects = [
-  {
-    title: "SonarPop",
-    summary: "React dashboard for visualising sonar data, connected to a backend API and an AI model.",
-    meta: ["React", "Chart.js"],
-    href: "/projects",
-  },
-  {
-    title: "CineMatch",
-    summary: "AI agent that helps you choose a film, using document retrieval, tools and the OMDb API.",
-    meta: ["Azure OpenAI", "OMDb API"],
-    href: "/projects",
-  },
-  {
-    title: "CineFind",
-    summary: "App to find cinemas and theatres in the Netherlands, with search, filters and a map.",
-    meta: ["React Native", "Expo"],
-    href: "/projects",
-  },
-];
+// Featured projects from the content collection (featured: true in the .md file), max 3
+const projects = (await getProjects())
+  .filter((project) => project.data.featured)
+  .slice(0, 3)
+  .map((project) => ({
+    title: project.data.title,
+    summary: project.data.summary,
+    meta: project.data.stack.slice(0, 2), // first two tools of the stack
+    href: `/projects/${project.id}`,
+  }));
 ---
 
 <BaseLayout title="Quinten van der Vlies · Creative developer" description="Portfolio of Quinten van der Vlies, a Dutch creative developer working where design and development meet.">
