@@ -1,10 +1,13 @@
 ---
-# CONCEPT (data + case text): based on CLAUDE.md and the GitHub repo. TODO: Quinten checks.
+# CONCEPT (case text): based on the README. Context and team confirmed by Quinten; role based on the repo. TODO: Quinten checks the text.
 title: CineMatch
 summary: AI agent that helps you choose a film, using document retrieval, tools and the OMDb API.
 year: 2026
 month: 4 # concept: month the repo was created
-type: school
+type: AI agent # concept
+context: school
+team: false
+role: Full-stack developer
 stack: [LangChain, Azure OpenAI, Express, OMDb API]
 featured: false
 order: 2

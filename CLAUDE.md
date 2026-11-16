@@ -135,7 +135,7 @@ Volgorde van boven naar beneden:
 1. Link terug: **"← All projects"** (mono-label).
 2. **Titel** groot.
 3. **Hero-beeld** (cover), breed, eventueel met afgeronde hoeken en dunne rand.
-4. **Korte beschrijving** (1–2 alinea's) naast of onder een **meta-blok** in dunne rijen: `Role`, `Year`, `Type` (school/team/persoonlijk), `Stack`.
+4. **Korte beschrijving** (1–2 alinea's) naast of onder een **meta-blok** in dunne rijen: `Year`, `Type` (web app, mobile app, …), `Context` (school/eigen project · team/solo), `Role`, plus `Stack`.
 5. Knoppen: **"View live"** en/of **"View code"** (glass-knoppen), alleen als `live`/`repo` bestaat.
 6. De **case-tekst** (Markdown body) in een smalle, leesbare kolom.
 7. **Galerij**: extra afbeeldingen en eventueel video's, groot onder elkaar.
@@ -168,7 +168,9 @@ title: SonarPop
 summary: One-line description for lists and cards.
 year: 2026
 role: Front-end developer
-type: team            # school | team | personal
+type: Web app         # wat het is: Web app, Mobile app, AI agent, ...
+context: school       # school | personal
+team: true            # true = team, false = solo
 stack: [React, Tailwind, Framer Motion, Chart.js]
 cover: ./sonarpop/cover.jpg
 gallery: [./sonarpop/1.jpg, ./sonarpop/2.jpg]
@@ -278,5 +280,7 @@ _(Hier noteren wat onderweg besloten wordt: gekozen fonts, definitieve kleuren, 
 - **Hero-teksten** (2026-11-13): hero vult het eerste scherm (90svh). Rol "Creative developer" in mono, hoofdletters, ruime tracking. Tagline "Using creativity to bring design and code together in websites and apps that look and feel right." Rechtsonder alleen mono-labels "Based in the Netherlands" / "Design · Code" (geen knoppen, geen AI). About-preview opent met "Design-minded. Code-driven."
 - **Projects** (2026-11-13): content collection `projects` (`src/content.config.js`, JavaScript) met één .md per project; `src/data/projects.js` haalt ze op (zonder drafts, op `order`). `/projects` is een lijst: grote titel links, rechts de stack als glass-chips (max 4 + "+N"), jaar en pijltje; bij hover opent de omschrijving met type en rol (geen "Updated"; die staat alleen op de detailpagina). GitHub-koppeling (`src/data/github.js`): talen en laatste update worden tijdens de build opgehaald (gecached, optioneel `GITHUB_TOKEN` in `.env`), en de build faalt nooit als GitHub niet bereikbaar is. `/projects/[slug]` volgt de detail-layout hierboven; home toont de projecten met `featured: true`. Opleiding/werk is géén collection maar `src/data/cv.js`. Projectdata is een concept uit CLAUDE.md + GitHub.
 - **Projectvolgorde** (2026-11-16): nieuwste eerst (`year`, dan optioneel `month`, dan `order`); projecten zonder jaar onderaan. De drie grootste schoolprojecten (SonarPop, Vintro, NatuurMoment) zijn `featured` op de home.
-- **Projectdetailpagina** (2026-11-16): titel → links omschrijving + knoppen (GitHub-knop met icoon, "View live ↗"), rechts info-rijen (Year, Role, Type) met daaronder Stack en Languages **naast elkaar** als glass-chips (`Chip.astro`) → "About the project" (alleen About, geen feature-lijsten) links met rechts de preview (video, anders de cover) → collage van screenshots (`gallery`, masonry: `Collage.astro`) → design-carousel (`designs`, optionele `figma`-link; alleen als er designs zijn: `DesignCarousel.astro`) → Next project. Video in `public/projects/<slug>/`. Ontbrekende media tonen alleen in `npm run dev` een gestippelde placeholder (`MediaPlaceholder.astro`).
+- **Projectdetailpagina** (2026-11-16): titel → links omschrijving + knoppen (GitHub-knop met icoon, "View live ↗"), rechts info-rijen (Year, Role, Type) met daaronder Stack en Languages **naast elkaar** als glass-chips (`Chip.astro`) → "About the project" (alleen About, geen feature-lijsten) links met rechts de preview (video, anders de cover) → collage van screenshots (`gallery`, `Collage.astro`: alleen staande beelden = rij naast elkaar, gemengd = masonry) → design-carousel (`designs` = wireframes/styleguide/Figma-beelden, optionele `figma`-link; `DesignCarousel.astro`). Verschijnt alleen als een project `designs` of `figma` heeft, ook in dev geen placeholder (niet elk project heeft design-werk) → Next project. Video in `public/projects/<slug>/`. Ontbrekende media tonen alleen in `npm run dev` een gestippelde placeholder (`MediaPlaceholder.astro`).
 - **Accenten op de projectpagina** (2026-11-16): talen met een klein bolletje in de GitHub-taalkleur, jaartal in dust (mono), zachte blauw/dust-gloed achter de preview.
+- **Media-workflow** (2026-11-16): Quinten zet ruwe bestanden in `media-inbox/<project>/` (staat in `.gitignore`); Claude verwerkt ze. Video's: H.264 MP4 (iPhone-HEVC speelt niet overal), zonder geluid, 30 fps, langste zijde ±1440–1600px, CRF 28, `+faststart`, liefst < 5 MB → `public/projects/<slug>/preview.mp4`. De preview-video houdt zijn eigen verhouding (staand of liggend), max 75svh hoog.
+- **Type vs. Context** (2026-11-16): `type` = wat het project is (Web app, Mobile app, AI agent, Web game …), `context` = school of personal, `team` = true/false. Getoond als Type en Context ("School project · Team"); team/solo is voor bezoekers het belangrijkst, samen met de rol.

@@ -1,20 +1,32 @@
 ---
-// Screenshot collage (masonry): columns in which every image keeps its own proportions,
-// so portrait phone screens and wide website screenshots mix without being cropped.
+// Screenshot collage. Picks a layout based on the images (Astro knows their sizes at build time):
+// - all portrait (phone screens): side by side in a row, like phones on a table
+// - mixed or landscape: masonry columns, every image keeps its own proportions (nothing is cropped)
 // Usage: <Collage images={[img1, img2]} title="Vintro" />
 import { Image } from "astro:assets";
 
 const { images = [], title } = Astro.props;
+const allPortrait = images.length > 0 && images.every((image) => image.height > image.width);
+
+const layout = allPortrait
+  ? "grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-5" // row of phone screens
+  : "columns-1 gap-6 sm:columns-2 xl:columns-3"; // masonry
+const sizes = allPortrait
+  ? "(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
+  : "(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw";
 ---
 
-<div class="columns-1 gap-6 sm:columns-2 xl:columns-3">
+<div class={layout}>
   {images.map((image, index) => (
     <Image
       src={image}
       alt={`${title} screenshot ${index + 1}`}
-      widths={[600, 1000, 1400]}
-      sizes="(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw"
-      class="mb-6 block w-full break-inside-avoid rounded-2xl border border-line"
+      widths={allPortrait ? [400, 700] : [600, 1000, 1400]}
+      sizes={sizes}
+      class:list={[
+        "block w-full rounded-2xl border border-line",
+        allPortrait ? "" : "mb-6 break-inside-avoid",
+      ]}
       data-reveal
     />
   ))}

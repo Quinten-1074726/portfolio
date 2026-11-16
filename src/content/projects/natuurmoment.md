@@ -1,10 +1,13 @@
 ---
-# CONCEPT (data + case text): based on the README of HenkHR/NatuurMoment (team repo, school project). TODO: Quinten checks, adds role.
+# CONCEPT (case text): based on the README of HenkHR/NatuurMoment. Context confirmed by Quinten; role based on his commits (mostly resources/views).
 title: NatuurMoment
 summary: Interactive group game that guides players through nature areas on their phones, with photo bingo challenges and multiple-choice questions.
 year: 2025
 month: 11 # concept: month the repo was created
-type: team
+type: Web game # concept
+context: school
+team: true
+role: Front-end developer
 stack: [Laravel, Livewire, Tailwind CSS, Alpine.js]
 featured: true
 order: 2

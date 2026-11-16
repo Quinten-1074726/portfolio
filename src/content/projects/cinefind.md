@@ -1,13 +1,20 @@
 ---
-# CONCEPT (data + case text): based on CLAUDE.md and the GitHub repo. TODO: Quinten checks, add type (school / team / personal).
+# CONCEPT (case text): based on the README. Context and team confirmed by Quinten; role based on the repo. TODO: Quinten checks the text.
 title: CineFind
 summary: App to find cinemas and theatres in the Netherlands, with search, filters, favourites and a map.
 year: 2026
 month: 7 # concept: month the repo was created
+type: Mobile app # concept
+context: school
+team: false
+role: Front-end developer
 stack: [React Native, Expo, NativeWind]
 featured: false
 order: 3
 repo: Quinten-1074726/CineFind
+video: /projects/cinefind/preview.mp4
+cover: ./cinefind/1.png # welcome screen, also the video poster
+gallery: [./cinefind/1.png, ./cinefind/2.png, ./cinefind/3.png, ./cinefind/4.png, ./cinefind/5.png] # no Figma designs for this project
 ---
 
 ## About the project

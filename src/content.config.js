@@ -15,7 +15,9 @@ const projects = defineCollection({
       year: z.number().optional(), // shown in lists; newest first
       month: z.number().int().min(1).max(12).optional(), // only used to sort projects within the same year
       role: z.string().optional(),
-      type: z.enum(["school", "team", "personal"]).optional(),
+      type: z.string().optional(), // what it is, e.g. "Web app", "Mobile app", "AI agent"
+      context: z.enum(["school", "personal"]).optional(), // school project or own project
+      team: z.boolean().optional(), // true = team project, false = solo (leave out when unknown)
       stack: z.array(z.string()).default([]),
       cover: image().optional(), // image next to the .md file, e.g. ./sonarpop/cover.jpg
       gallery: z.array(image()).default([]), // screenshots, e.g. [./sonarpop/1.jpg, ./sonarpop/2.jpg]

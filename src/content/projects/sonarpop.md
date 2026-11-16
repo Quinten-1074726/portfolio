@@ -1,11 +1,13 @@
 ---
-# CONCEPT (data + case text): based on CLAUDE.md and the GitHub repo. TODO: Quinten checks.
+# CONCEPT (case text): based on the README. Context and team confirmed by Quinten; role based on the repo. TODO: Quinten checks the text.
 title: SonarPop
 summary: React dashboard for visualising sonar data, connected to a backend API and an AI model.
 year: 2026
 month: 3 # concept: month the repo was created
-role: Front-end developer # TODO: check
-type: team
+type: Web app # concept
+context: school
+team: true
+role: Front-end developer
 stack: [React, Tailwind CSS, Framer Motion, Chart.js]
 featured: true
 order: 1

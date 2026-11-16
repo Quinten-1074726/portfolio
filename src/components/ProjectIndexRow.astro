@@ -2,20 +2,20 @@
 // One row in the project index (/projects).
 // Left: big title. Right: tech stack as glass chips, year, arrow.
 // On hover (or keyboard focus; always on touch screens) extra info opens below the title:
-// summary + type and role (small mono line).
+// summary + type, context and role (small mono line).
 // Usage: <ProjectIndexRow project={entry} />
-import { typeLabels } from "../data/projects.js";
+import { contextText } from "../data/projects.js";
 import Chip from "./Chip.astro";
 
 const { project } = Astro.props;
-const { title, summary, stack, type, role, year } = project.data;
+const { title, summary, stack, type, context, team, role, year } = project.data;
 
 const MAX_CHIPS = 4;
 const chips = stack.slice(0, MAX_CHIPS);
 const hiddenCount = stack.length - chips.length;
 
 // Small facts shown with the summary
-const facts = [type && `${typeLabels[type]} project`, role].filter(Boolean);
+const facts = [type, contextText({ context, team }), role].filter(Boolean);
 
 // Same "open" state as ProjectRow on the home page
 const open = "group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr] [@media(hover:none)]:grid-rows-[1fr]";
