@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   // The live address. Used for absolute links, e.g. the Open Graph image (link previews on LinkedIn etc.)
-  site: 'https://quintenvdvlies.nl',
+  site: 'https://www.quintenvdvlies.nl',
 
   integrations: [react()],
 
