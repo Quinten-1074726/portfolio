@@ -1,7 +1,7 @@
 ---
 # CONCEPT (case text): based on the README. Context and team confirmed by Quinten; role based on the repo. TODO: Quinten checks the text.
 title: SonarPop
-summary: Music app that recommends songs and artists based on your taste, with a dashboard for tuning the AI model. # concept, based on the screenshots: TODO Quinten checks
+summary: Music app that recommends songs and artists based on your taste, with a dashboard for tuning the AI model.
 year: 2026
 month: 3 # concept: month the repo was created
 type: Web app # concept
@@ -20,4 +20,6 @@ repo: Quinten-1074726/TLE3-Frontend-SonarPop
 
 ## About the project
 
-SonarPop is an interactive web application that visualises sonar-based data in a clear and responsive interface. This project covers the front end: presenting the data, handling user interaction and communicating with the back-end API and AI model, which were built in a separate repository by the team.
+SonarPop helps you step out of your music bubble. After a short onboarding where you pick your favourite genres, you get recommendations that you can fine-tune per genre with sliders, and a statistics page shows what you listen to most.
+
+In this team project I built the front end, including the admin dashboard for tuning the AI recommendation model.

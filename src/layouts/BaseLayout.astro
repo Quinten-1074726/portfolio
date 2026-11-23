@@ -1,13 +1,16 @@
 ---
-// Shared page shell: <head>, global styles and the page content (<slot />).
-// Background and View Transitions are added in later steps.
+// Shared page shell: <head>, global styles, waving background and the page content (<slot />).
 import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import ScrollHint from "../components/ScrollHint.astro";
 import PageLoader from "../components/PageLoader.astro";
+import Background from "../components/Background.astro";
 
-const { title, description = "TODO: site description" } = Astro.props;
+const {
+  title,
+  description = "Portfolio of Quinten van der Vlies, a Dutch creative developer working where design and development meet.",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -40,6 +43,7 @@ const { title, description = "TODO: site description" } = Astro.props;
     </script>
   </head>
   <body>
+    <Background />
     <PageLoader />
     <Navbar />
     <slot />

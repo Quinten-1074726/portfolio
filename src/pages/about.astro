@@ -8,6 +8,10 @@ import SkillTree from "../components/SkillTree.astro";
 import { education, internships, experience, qualities } from "../data/cv.js";
 import { Image } from "astro:assets";
 import portrait from "../assets/quinten.png";
+import { existsSync } from "node:fs";
+
+// The "Download CV" button only appears once public/cv.pdf exists (checked during the build)
+const hasCv = existsSync("public/cv.pdf");
 
 // Shared layout for the sections below: heading left (sticky on large screens), content right
 const sectionGrid = "wrap grid gap-8 pt-32 sm:pt-44 lg:grid-cols-[1fr_2fr] lg:gap-16";
@@ -51,8 +55,7 @@ const sectionHeading = "heading-xl lg:sticky lg:top-32 lg:self-start";
           </div>
 
           <div class="mt-10 flex flex-wrap gap-3" data-reveal style="--reveal-delay: 550ms">
-            {/* Put the CV in public/cv.pdf: until then this link gives a 404 */}
-            <GlassButton href="/cv.pdf" target="_blank">Download CV</GlassButton>
+            {hasCv && <GlassButton href="/cv.pdf" target="_blank">Download CV</GlassButton>}
             <GlassButton href="#contact">Contact</GlassButton>
           </div>
         </div>
