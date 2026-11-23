@@ -1,33 +1,50 @@
 ---
-// Screenshot collage. Picks a layout based on the images (Astro knows their sizes at build time):
-// - all portrait (phone screens): side by side in a row, like phones on a table
-// - mixed or landscape: masonry columns, every image keeps its own proportions (nothing is cropped)
+// Screenshot collage. Astro knows the image sizes at build time, so the layout adapts:
+// - portrait images (phone screens): side by side in a row, like phones on a table
+// - landscape images: masonry columns, every image keeps its own proportions (nothing is cropped)
+// A mix of both = the row of phones first, then the landscape images below it.
 // Usage: <Collage images={[img1, img2]} title="Vintro" />
 import { Image } from "astro:assets";
 
 const { images = [], title } = Astro.props;
-const allPortrait = images.length > 0 && images.every((image) => image.height > image.width);
 
-const layout = allPortrait
-  ? "grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-5" // row of phone screens
-  : "columns-1 gap-6 sm:columns-2 xl:columns-3"; // masonry
-const sizes = allPortrait
-  ? "(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
-  : "(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw";
+// Keep the number of every image (screenshot 1, 2, ...) in gallery order for the alt text
+const numbered = images.map((image, index) => ({ image, number: index + 1 }));
+const portrait = numbered.filter(({ image }) => image.height > image.width);
+const landscape = numbered.filter(({ image }) => image.height <= image.width);
+
+// Masonry never gets more columns than there are images (2 screenshots = 2 columns, no empty third one)
+const threeColumns = landscape.length >= 3;
 ---
 
-<div class={layout}>
-  {images.map((image, index) => (
-    <Image
-      src={image}
-      alt={`${title} screenshot ${index + 1}`}
-      widths={allPortrait ? [400, 700] : [600, 1000, 1400]}
-      sizes={sizes}
-      class:list={[
-        "block w-full rounded-2xl border border-line",
-        allPortrait ? "" : "mb-6 break-inside-avoid",
-      ]}
-      data-reveal
-    />
-  ))}
+<div class="grid gap-6">
+  {portrait.length > 0 && (
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-5">
+      {portrait.map(({ image, number }) => (
+        <Image
+          src={image}
+          alt={`${title} screenshot ${number}`}
+          widths={[400, 700]}
+          sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
+          class="block w-full rounded-2xl border border-line"
+          data-reveal
+        />
+      ))}
+    </div>
+  )}
+
+  {landscape.length > 0 && (
+    <div class:list={["columns-1 gap-6 sm:columns-2", threeColumns && "xl:columns-3"]}>
+      {landscape.map(({ image, number }) => (
+        <Image
+          src={image}
+          alt={`${title} screenshot ${number}`}
+          widths={[600, 1000, 1400]}
+          sizes={threeColumns ? "(min-width: 1280px) 33vw, (min-width: 640px) 50vw, 100vw" : "(min-width: 640px) 50vw, 100vw"}
+          class="mb-6 block w-full break-inside-avoid rounded-2xl border border-line"
+          data-reveal
+        />
+      ))}
+    </div>
+  )}
 </div>

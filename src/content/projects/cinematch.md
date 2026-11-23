@@ -1,7 +1,7 @@
 ---
 # CONCEPT (case text): based on the README. Context and team confirmed by Quinten; role based on the repo. TODO: Quinten checks the text.
 title: CineMatch
-summary: AI agent that helps you choose a film, using document retrieval, tools and the OMDb API.
+summary: AI agent that helps you decide which film to watch.
 year: 2026
 month: 4 # concept: month the repo was created
 type: AI agent # concept
@@ -9,6 +9,9 @@ context: school
 team: false
 role: Full-stack developer
 stack: [LangChain, Azure OpenAI, Express, OMDb API]
+video: /projects/cinematch/preview.mp4
+cover: ./cinematch/1.png # chat with film suggestions, also the video poster
+gallery: [./cinematch/1.png, ./cinematch/2.png]
 featured: false
 order: 2
 repo: Quinten-1074726/PRG08-Opdrachten

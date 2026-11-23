@@ -9,6 +9,9 @@ context: school
 team: false
 role: Full-stack developer
 stack: [LangChain, Azure OpenAI]
+video: /projects/detective-chatbot/preview.mp4
+cover: ./detective-chatbot/1.png # start of the case, also the video poster
+gallery: [./detective-chatbot/1.png, ./detective-chatbot/2.png]
 order: 6
 repo: Quinten-1074726/PRG08-Opdrachten
 ---

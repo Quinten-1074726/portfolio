@@ -166,6 +166,20 @@
   letter-spacing: -0.045em;
 }
 
+/* Big title that always fits on one line per word (project pages: "EXPENSETRACKER").
+   Set --title-chars to the number of letters in the longest word; the font then shrinks
+   when that word would be wider than the content area (an uppercase letter is ~0.62em wide). */
+@utility heading-fit {
+  font-family: var(--font-display);
+  line-height: 0.9;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  font-size: min(
+    clamp(3.5rem, min(13.5vw, 27svh), 24rem),
+    calc((min(100vw, 150rem) - 2 * clamp(1.25rem, 4vw, 4rem)) / (var(--title-chars, 8) * 0.62))
+  );
+}
+
 /* Small vertical text next to a big title (e.g. "van der" next to "Quinten").
    Sized relative to the title (em), so it scales with it. Uses writing-mode instead of
    rotate, so it does not clash with the reveal animation (which uses transform). */

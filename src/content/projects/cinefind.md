@@ -1,7 +1,7 @@
 ---
 # CONCEPT (case text): based on the README. Context and team confirmed by Quinten; role based on the repo. TODO: Quinten checks the text.
 title: CineFind
-summary: App to find cinemas and theatres in the Netherlands, with search, filters, favourites and a map.
+summary: App for finding cinemas and theatres near you in the Netherlands.
 year: 2026
 month: 7 # concept: month the repo was created
 type: Mobile app # concept

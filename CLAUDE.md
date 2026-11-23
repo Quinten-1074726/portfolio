@@ -36,7 +36,7 @@ Niet nodig om mee te beginnen: GSAP, Lenis, Three.js. Alleen toevoegen als een c
 Project aanmaken in de huidige (gekloonde) repo-map, bijvoorbeeld:
 
 ```bash
-npm create astro@latest .     # template: minimal, TypeScript: base, git: al aanwezig
+npm create astro@latest .     # template: minimal, TypeScript: base, git: al aanwezig, javascript is wat ik nu weet als je mijn github ook checkt.
 npx astro add react
 npx astro add tailwind
 npm install motion
@@ -135,7 +135,7 @@ Volgorde van boven naar beneden:
 1. Link terug: **"← All projects"** (mono-label).
 2. **Titel** groot.
 3. **Hero-beeld** (cover), breed, eventueel met afgeronde hoeken en dunne rand.
-4. **Korte beschrijving** (1–2 alinea's) naast of onder een **meta-blok** in dunne rijen: `Year`, `Type` (web app, mobile app, …), `Context` (school/eigen project · team/solo), `Role`, plus `Stack`.
+4. **Korte beschrijving** (1–2 alinea's) naast of onder een **meta-blok** in dunne rijen: `Role`, `Year`, `Type` (school/team/persoonlijk), `Stack`.
 5. Knoppen: **"View live"** en/of **"View code"** (glass-knoppen), alleen als `live`/`repo` bestaat.
 6. De **case-tekst** (Markdown body) in een smalle, leesbare kolom.
 7. **Galerij**: extra afbeeldingen en eventueel video's, groot onder elkaar.
@@ -168,9 +168,7 @@ title: SonarPop
 summary: One-line description for lists and cards.
 year: 2026
 role: Front-end developer
-type: Web app         # wat het is: Web app, Mobile app, AI agent, ...
-context: school       # school | personal
-team: true            # true = team, false = solo
+type: team            # school | team | personal
 stack: [React, Tailwind, Framer Motion, Chart.js]
 cover: ./sonarpop/cover.jpg
 gallery: [./sonarpop/1.jpg, ./sonarpop/2.jpg]
@@ -200,8 +198,6 @@ Alle repo's zijn openbaar op github.com/Quinten-1074726 en mogen gelezen worden 
 4. **ExpenseTracker**: full-stack. React + Vite + Tailwind met beveiligde routes; Express + MongoDB met REST, pagination en JWT-login. Repo's: `ExpenseTracker-Frontend`, `ExpenseTracker-Backend`.
 5. **CineMap** (WAF): Laravel-webapp met filters, watchlist, adminomgeving en poster-upload; Tailwind en Alpine.js. Repo: `WAF-Praktijkopdracht-CineMap`.
 6. **Detective-game met AI-chatbot** (PRG08): interactieve game met een taalmodel. Repo: `PRG08-Opdrachten`.
-7. **Vintro** (TLE4, jaar 2, teamproject, groot): app om een volledig sollicitatieproces te oefenen (cv, motivatiebrief, proefgesprek met feedback). React + Tailwind (front-end), Laravel + SQLite (back-end). Repo: `semvde/Vintro` (Quinten is contributor).
-8. **NatuurMoment** (schoolproject, team, groot): interactief groepsspel in de natuur op de telefoon (foto-bingo, meerkeuzevragen, live scorebord). Laravel 12, Livewire, Tailwind, Alpine.js. Repo: `HenkHR/NatuurMoment` (Quinten is contributor).
 
 **Niet opnemen**: Digital Human (loopt nog; later toevoegen als belangrijk AI-project), PRG07-Opdrachten, FullStackWD-oefeningen, TLE1 Anti-AI Captcha, RAC-Security.
 
@@ -259,28 +255,3 @@ Bij `prefers-reduced-motion`: geen beweging, alleen directe weergave.
 ## Besluiten
 
 _(Hier noteren wat onderweg besloten wordt: gekozen fonts, definitieve kleuren, lijst vs. carousel, enz.)_
-
-- **Dust als subtiel tweede accent** (2026-11-10): iets zichtbaarder dan "alleen heel beperkt", maar nooit dominant. Gebruikt voor: tekstselectie (`::selection`) en de warme lichtrand bovenop glass-knoppen bij hover. Blauw blijft het hoofdaccent (focus, links, indicatoren, gloed).
-- **Breder doel en inhoud** (2026-11-10): de site is een algemeen portfolio, niet alleen voor de stage. Geen teksten over stage zoeken, school of minor op de site (dus geen "available for internship", geen CMGT/minor-feiten op de home).
-- **Geen sectienummers en decoratieve lijnen** (2026-11-10): geen "01 // 04"-labels en geen scheidingslijnen tussen secties. Dunne lijnen alleen waar ze een lijst ordenen (projectrijen, footer-rijen).
-- **Breed layout** (2026-11-10): alle content in de `wrap`-utility (max 150rem, zijmarge `clamp(1.25rem, 4vw, 4rem)`), ook de footer. Footer compacter dan eerst.
-- **Rol**: "Creative developer" (2026-11-10).
-- **Kopfont** (2026-11-10, voorlopig): Space Grotesk via `--font-display`; Inter Tight blijft voor bodytekst. Kandidaten Host Grotesk, Schibsted Grotesk en Geist staan ter vergelijking op `/styleguide`. TODO: definitief kiezen en de rest verwijderen.
-- **Home** (2026-11-10): naam (regel-voor-regel animatie bij laden) → 3 projecten + "Discover more" → korte About met knoppen "More about me" en "Timeline" → footer.
-- **Hero-naam** (2026-11-11): hoofdletters, gewicht 500. "QUINTEN" linksboven met klein verticaal mono "van der" ernaast (`name-vertical`), "VLIES" rechts eronder. Rol + intro staan vanaf `xl` links naast "Vlies", daaronder onder de naam.
-- **Skills** (2026-11-11): compact paneel (`Skills.astro`, data in `src/data/skills.js`) met iconen via Simple Icons (initialen als fallback) en 3 niveaus: Proficient / Comfortable / Familiar. Figma = 2, Creative Cloud = 3.
-- **Navbar** (2026-11-11): vanaf `sm` groter (meer padding, 15px tekst, grotere thema-knop); op mobiel compact.
-- **Grote schermen** (2026-11-13): de naam schaalt mee met `min(13.5vw, 27svh)` (max 24rem) en `wrap` mag tot 150rem, zodat de hero op 1920px en op grotere schermen dezelfde verhoudingen heeft.
-- **Typografische hiërarchie** (2026-11-13): sectiekoppen (`heading-xl`, `heading-lg`) in HOOFDLETTERS, gewicht 500, net als de naam in de hero. Inhoudstitels (zoals projecttitels) in gewone schrijfwijze, gewicht 300. Geen extra font nodig.
-- **Kleur op About** (2026-11-13): blauw/dust-gloed achter de foto, jaartallen in dust, rij-titels blauw bij hover, Qualities warm bij hover. Light-mode dust donkerder gemaakt (#7d5f40, 5.1:1) voor leesbaarheid.
-- **About-opbouw** (2026-11-13): kort, **tijdloos** verhaal bovenaan (geen opleidingen, scholen, projecten of tools noemen, zodat het niet steeds aangepast hoeft te worden) met openingszin "I'm Quinten, a Dutch creative developer…", design + development, front-end, nieuwsgierig naar AI, en interesses (creatief, games, voetbal, film/series) verwerkt in het verhaal. Geen aparte "Beyond code"-sectie. Daarna Education → Internships → Experience → Skills (tree) + Qualities.
-- **Contact** (2026-11-13): e-mail quintenvdvlies@gmail.com, LinkedIn, GitHub en Behance (als "Earlier design work", werk van het Grafisch Lyceum) in de footer.
-- **Logo + loader** (2026-11-13): QV-logo (`src/assets/logo.png`) links in de navbar (in light mode geïnverteerd; op mobiel vervangt het de Home-link) en als favicon. Page loader: logo + teller 000→100 + lijntje (~1 s), daarna schuift het scherm omhoog; alleen bij het eerste bezoek per sessie, nooit bij reduced motion.
-- **Timeline** (2026-11-13): één chronologische lijn (nieuwste eerst) met opleiding, stages en werk door elkaar, uit dezelfde data als About (`cv.js` → `timeline.js`). Alles wit, alleen wat nu loopt is blauw (gevuld en gloeiend); legenda toont alleen "Now". Jaartal alleen bij een nieuw jaar. De lijn vult zich (wit) tijdens het scrollen. Vanaf `md` staat de lijn in het midden en wisselen de stappen links/rechts af (jaartal aan de overkant); op mobiel één kolom met de lijn links. Anders dan About (lijsten per categorie), zodat het niet dubbel voelt.
-- **Hero-teksten** (2026-11-13): hero vult het eerste scherm (90svh). Rol "Creative developer" in mono, hoofdletters, ruime tracking. Tagline "Using creativity to bring design and code together in websites and apps that look and feel right." Rechtsonder alleen mono-labels "Based in the Netherlands" / "Design · Code" (geen knoppen, geen AI). About-preview opent met "Design-minded. Code-driven."
-- **Projects** (2026-11-13): content collection `projects` (`src/content.config.js`, JavaScript) met één .md per project; `src/data/projects.js` haalt ze op (zonder drafts, op `order`). `/projects` is een lijst: grote titel links, rechts de stack als glass-chips (max 4 + "+N"), jaar en pijltje; bij hover opent de omschrijving met type en rol (geen "Updated"; die staat alleen op de detailpagina). GitHub-koppeling (`src/data/github.js`): talen en laatste update worden tijdens de build opgehaald (gecached, optioneel `GITHUB_TOKEN` in `.env`), en de build faalt nooit als GitHub niet bereikbaar is. `/projects/[slug]` volgt de detail-layout hierboven; home toont de projecten met `featured: true`. Opleiding/werk is géén collection maar `src/data/cv.js`. Projectdata is een concept uit CLAUDE.md + GitHub.
-- **Projectvolgorde** (2026-11-16): nieuwste eerst (`year`, dan optioneel `month`, dan `order`); projecten zonder jaar onderaan. De drie grootste schoolprojecten (SonarPop, Vintro, NatuurMoment) zijn `featured` op de home.
-- **Projectdetailpagina** (2026-11-16): titel → links omschrijving + knoppen (GitHub-knop met icoon, "View live ↗"), rechts info-rijen (Year, Role, Type) met daaronder Stack en Languages **naast elkaar** als glass-chips (`Chip.astro`) → "About the project" (alleen About, geen feature-lijsten) links met rechts de preview (video, anders de cover) → collage van screenshots (`gallery`, `Collage.astro`: alleen staande beelden = rij naast elkaar, gemengd = masonry) → design-carousel (`designs` = wireframes/styleguide/Figma-beelden, optionele `figma`-link; `DesignCarousel.astro`). Verschijnt alleen als een project `designs` of `figma` heeft, ook in dev geen placeholder (niet elk project heeft design-werk) → Next project. Video in `public/projects/<slug>/`. Ontbrekende media tonen alleen in `npm run dev` een gestippelde placeholder (`MediaPlaceholder.astro`).
-- **Accenten op de projectpagina** (2026-11-16): talen met een klein bolletje in de GitHub-taalkleur, jaartal in dust (mono), zachte blauw/dust-gloed achter de preview.
-- **Media-workflow** (2026-11-16): Quinten zet ruwe bestanden in `media-inbox/<project>/` (staat in `.gitignore`); Claude verwerkt ze. Video's: H.264 MP4 (iPhone-HEVC speelt niet overal), zonder geluid, 30 fps, langste zijde ±1440–1600px, CRF 28, `+faststart`, liefst < 5 MB → `public/projects/<slug>/preview.mp4`. De preview-video houdt zijn eigen verhouding (staand of liggend), max 75svh hoog.
-- **Type vs. Context** (2026-11-16): `type` = wat het project is (Web app, Mobile app, AI agent, Web game …), `context` = school of personal, `team` = true/false. Getoond als Type en Context ("School project · Team"); team/solo is voor bezoekers het belangrijkst, samen met de rol.
