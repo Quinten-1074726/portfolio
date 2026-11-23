@@ -44,9 +44,12 @@ const hasPreview = video || cover; // something to show next to "About the proje
 
 // Small WebP version of the cover, shown as the video poster while the video loads
 const poster = cover ? (await getImage({ src: cover, width: 800, format: "webp" })).src : undefined;
+
+// Link preview (Open Graph): the cover as a JPG, because not every app shows WebP previews
+const shareImage = cover ? (await getImage({ src: cover, width: 1200, format: "jpg" })).src : undefined;
 ---
 
-<BaseLayout title={`${title} · Quinten van der Vlies`} description={summary}>
+<BaseLayout title={`${title} · Quinten van der Vlies`} description={summary} image={shareImage}>
   <main class="wrap pt-32 sm:pt-40">
     <a href="/projects" class="label inline-flex items-center gap-2 text-ash transition-colors hover:text-signal" data-reveal>
       ← All projects
